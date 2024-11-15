@@ -1,5 +1,6 @@
 package com.untillness.borwita.ui.wrapper.fragments.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.databinding.FragmentProfileBinding
+import com.untillness.borwita.ui.profile_edit.ProfileEditActivity
 
 class ProfileFragment : Fragment() {
 
@@ -27,6 +29,13 @@ class ProfileFragment : Fragment() {
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        binding.apply {
+            listUbahProfil.setOnClickListener{
+                val intent = Intent(this@ProfileFragment.context, ProfileEditActivity::class.java)
+                startActivity(intent)
+            }
+        }
 
         return root
     }

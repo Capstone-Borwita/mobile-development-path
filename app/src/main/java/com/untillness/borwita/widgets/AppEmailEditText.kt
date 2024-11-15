@@ -28,7 +28,7 @@ class AppEmailEditText @JvmOverloads constructor(
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        this.hint = context.getString(R.string.masukkan_email)
+        this.hint = this.hint ?: context.getString(R.string.masukkan_email)
         this.editText?.maxLines = 1
         this.editText?.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
