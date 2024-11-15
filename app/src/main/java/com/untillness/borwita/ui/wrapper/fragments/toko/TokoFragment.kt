@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.untillness.borwita.databinding.FragmentDashboardBinding
+import com.untillness.borwita.databinding.FragmentTokoBinding
 
 class TokoFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentTokoBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,7 +25,7 @@ class TokoFragment : Fragment() {
         val tokoViewModel =
             ViewModelProvider(this).get(TokoViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentTokoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
 //        val textView: TextView = binding.textDashboard
