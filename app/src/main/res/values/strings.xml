@@ -54,4 +54,8 @@
     <string name="title_activity_maps" translatable="false">MapsActivity</string>
     <string name="kirim_lokasi_sekarang">Kirim Lokasi Saat Ini</string>
     <string name="map" translatable="false">Map</string>
+    <string name="title_activity_wrapper">WrapperActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

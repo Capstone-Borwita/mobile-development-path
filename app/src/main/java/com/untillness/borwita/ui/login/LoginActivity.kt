@@ -11,6 +11,7 @@ import com.untillness.borwita.databinding.ActivityLoginBinding
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.register.RegisterActivity
+import com.untillness.borwita.ui.wrapper.WrapperActivity
 import com.untillness.borwita.widgets.AppDialog
 
 class LoginActivity : Unfocus() {
@@ -112,17 +113,21 @@ class LoginActivity : Unfocus() {
     }
 
     private fun doLogin() {
-        if (listOf(
-                hasEmptyFields(), hasErrorFields()
-            ).contains(true)
-        ) {
-            Snackbar.make(
-                this.binding.root,
-                getString(R.string.silahkan_mengisi_field_diatas_terlebih_dahulu),
-                Snackbar.LENGTH_SHORT
-            ).show()
-            return
-        }
+//        if (listOf(
+//                hasEmptyFields(), hasErrorFields()
+//            ).contains(true)
+//        ) {
+//            Snackbar.make(
+//                this.binding.root,
+//                getString(R.string.silahkan_mengisi_field_diatas_terlebih_dahulu),
+//                Snackbar.LENGTH_SHORT
+//            ).show()
+//            return
+//        }
+
+        val intent = Intent(this@LoginActivity, WrapperActivity::class.java)
+        startActivity(intent)
+        finish()
 
 //        val req = LoginRequest(
 //            email = binding.fieldEmail.editText?.text.toString(),
