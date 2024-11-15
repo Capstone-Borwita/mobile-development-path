@@ -22,14 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(this.binding.root)
         supportActionBar?.hide()
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
         Handler(Looper.getMainLooper()).postDelayed({
-
             val intent = Intent(this, LoginActivity::class.java)
 
             startActivity(intent)
