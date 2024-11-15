@@ -10,6 +10,7 @@ import com.untillness.borwita.R
 import com.untillness.borwita.databinding.ActivityLoginBinding
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
+import com.untillness.borwita.ui.register.RegisterActivity
 import com.untillness.borwita.widgets.AppDialog
 
 class LoginActivity : Unfocus() {
@@ -86,10 +87,10 @@ class LoginActivity : Unfocus() {
             this.buttonLogin.setOnClickListener {
                 doLogin()
             }
-//            this.buttonRegister.setOnClickListener {
-//                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
-//                startActivity(intent)
-//            }
+            this.buttonRegister.setOnClickListener {
+                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 

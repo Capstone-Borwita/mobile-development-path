@@ -18,7 +18,7 @@ class AppPasswordEditText @JvmOverloads constructor(
         ContextCompat.getDrawable(context, R.drawable.baseline_password_24) as Drawable
 
     init {
-        startIconDrawable = prefixIcon
+//        startIconDrawable = prefixIcon
 
         setOnTouchListener(this)
     }
@@ -26,7 +26,7 @@ class AppPasswordEditText @JvmOverloads constructor(
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        this.hint = context.getString(R.string.masukkan_password)
+//        this.hint = context.getString(R.string.masukkan_password)
         this.editText?.maxLines = 1
         this.endIconMode = END_ICON_PASSWORD_TOGGLE
 

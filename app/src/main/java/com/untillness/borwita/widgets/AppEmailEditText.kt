@@ -20,7 +20,7 @@ class AppEmailEditText @JvmOverloads constructor(
         ContextCompat.getDrawable(context, R.drawable.outline_alternate_email_24) as Drawable
 
     init {
-        startIconDrawable = prefixIcon
+//        startIconDrawable = prefixIcon
 
         setOnTouchListener(this)
     }

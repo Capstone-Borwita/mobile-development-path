@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity">
+    tools:context=".ui.register.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:id="@+id/imageView2"
             android:layout_width="300dp"
             android:layout_height="100dp"
-            android:layout_marginTop="156dp"
+            android:layout_marginTop="16dp"
             android:layout_marginHorizontal="16dp"
             android:contentDescription="@string/deskripsi"
             app:srcCompat="@drawable/logo" />
@@ -29,17 +29,32 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/silahkan_masuk"
+            android:text="Daftar Akun"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="24sp"
             android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/field_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            android:hint="Masukkan Nama Lengkap*">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.untillness.borwita.widgets.AppEmailEditText
             android:id="@+id/field_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -65,30 +80,46 @@
 
         </com.untillness.borwita.widgets.AppPasswordEditText>
 
+        <com.untillness.borwita.widgets.AppPasswordEditText
+            android:id="@+id/field_password_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            android:hint="Masukkan Ulang Kata Sandi*">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPassword"/>
+
+        </com.untillness.borwita.widgets.AppPasswordEditText>
+
         <Button
-            android:id="@+id/button_login"
+            android:id="@+id/button_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="32dp"
-            android:text="@string/masuk" />
+            android:text="@string/daftar" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/belum_punya_akun"
+            android:text="@string/sudah_punya_akun"
             android:textAlignment="center" />
 
         <Button
-            android:id="@+id/button_register"
+            android:id="@+id/button_login"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="@string/daftar_akun" />
+            android:text="@string/masuk" />
 
     </LinearLayout>
 

@@ -7,10 +7,10 @@
     <string name="please_wait">Mohon tunggu…</string>
     <string name="curhat">Curhat</string>
     <string name="silahkan_masuk">Silahkan Masuk</string>
-    <string name="masukkan_password">Masukkan Password*</string>
+    <string name="masukkan_password">Masukkan Kata Sandi*</string>
     <string name="masuk">Masuk</string>
     <string name="belum_punya_akun">Belum punya akun?</string>
-    <string name="daftar">Daftar Akun</string>
+    <string name="daftar">Daftar</string>
     <string name="daftar_akun">Daftar Akun</string>
     <string name="nama_lengkap">Nama Lengkap*</string>
     <string name="mendaftar">Mendaftar</string>
