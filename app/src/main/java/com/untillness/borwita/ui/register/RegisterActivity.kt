@@ -14,10 +14,12 @@ class RegisterActivity : Unfocus() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
 
         this.binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
+        supportActionBar?.hide()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

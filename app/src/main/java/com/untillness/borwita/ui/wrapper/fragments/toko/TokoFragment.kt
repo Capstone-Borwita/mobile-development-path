@@ -1,4 +1,4 @@
-package com.untillness.borwita.ui.wrapper.ui.home
+package com.untillness.borwita.ui.wrapper.fragments.toko
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.untillness.borwita.databinding.FragmentHomeBinding
+import com.untillness.borwita.databinding.FragmentDashboardBinding
 
-class HomeFragment : Fragment() {
+class TokoFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentDashboardBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        val tokoViewModel =
+            ViewModelProvider(this).get(TokoViewModel::class.java)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textDashboard
+        tokoViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root

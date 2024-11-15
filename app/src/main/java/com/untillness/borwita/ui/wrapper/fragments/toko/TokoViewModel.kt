@@ -1,10 +1,10 @@
-package com.untillness.borwita.ui.wrapper.ui.dashboard
+package com.untillness.borwita.ui.wrapper.fragments.toko
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class TokoViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
