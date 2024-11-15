@@ -1,3 +1,57 @@
 <resources>
     <string name="app_name">Borwita</string>
+    <string name="deskripsi">deskripsi</string>
+    <string name="dicoding_submission">Dicoding Submission</string>
+    <string name="tidak_ada_data">Tidak ada Data.</string>
+    <string name="muat_ulang">Muat Ulang</string>
+    <string name="please_wait">Mohon tunggu…</string>
+    <string name="curhat">Curhat</string>
+    <string name="silahkan_masuk">Silahkan Masuk</string>
+    <string name="masukkan_password">Masukkan Password*</string>
+    <string name="masuk">Masuk</string>
+    <string name="belum_punya_akun">Belum punya akun?</string>
+    <string name="daftar">Daftar Akun</string>
+    <string name="daftar_akun">Daftar Akun</string>
+    <string name="nama_lengkap">Nama Lengkap*</string>
+    <string name="mendaftar">Mendaftar</string>
+    <string name="sudah_punya_akun">Sudah punya akun?</string>
+    <string name="lorem_isi_yang_banyak_lorem_isi_yang_banyak_lorem_isi_yang_banyak_lorem_isi_yang_banyak_lorem_isi_yang_banyak_lorem_isi_yang_banyak_lorem_isi_yang_banyak" translatable="false">Lorem isi yang banyak Lorem isi yang banyak Lorem isi yang banyak Lorem isi yang banyak Lorem isi yang banyak Lorem isi yang banyak Lorem isi yang banyak</string>
+    <string name="author">Pemilik</string>
+    <string name="dot" translatable="false">•</string>
+    <string name="_12_jan_2024_23_00" translatable="false">12 Jan 2024 – 23:00</string>
+    <string name="muhammad_abdullah_said" translatable="false">Muhammad Abdullah Said</string>
+    <string name="apa_yang_anda_pikirkan">Apa yang anda pikirkan?</string>
+    <string name="pengaturan_bahasa">Bahasa</string>
+    <string name="silahkan_pilih_gambar">Silahkan pilih gambar</string>
+    <string name="kamera">Kamera</string>
+    <string name="galeri">Galeri</string>
+    <string name="ceritakan_kisahmu">Ceritakan kisahmu</string>
+    <string name="unggah">Unggah</string>
+    <string name="gagal">Gagal!</string>
+    <string name="ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi">Ada kesalahan, silahkan coba lagi beberapa saat lagi.</string>
+    <string name="tutup">Tutup</string>
+    <string name="berhasil">Berhasil!</string>
+    <string name="proses_telah_selesai">Proses telah selesai.</string>
+    <string name="ok">OK</string>
+    <string name="batalkan">Batalkan</string>
+    <string name="ya">Ya</string>
+    <string name="masukkan_email">Masukkan Email*</string>
+    <string name="email_wajib_diisi">Email wajib diisi.</string>
+    <string name="email_yang_kamu_masukkan_tidak_valid">Email yang kamu masukkan tidak valid.</string>
+    <string name="password_wajib_diisi">Password wajib diisi.</string>
+    <string name="password_tidak_boleh_kurang_dari_8_karakter">Password tidak boleh kurang dari 8 karakter</string>
+    <string name="keluar_dari_akun">Keluar dari akun?</string>
+    <string name="kamu_akan_keluar_dari_akun_dan_harus_masuk_kembali">Kamu akan keluar dari akun, dan harus masuk kembali.</string>
+    <string name="berhasil_masuk">Berhasil masuk.</string>
+    <string name="silahkan_mengisi_field_diatas_terlebih_dahulu">Silahkan mengisi field diatas terlebih dahulu.</string>
+    <string name="nama_wajib_diisi">Nama wajib diisi.</string>
+    <string name="panjang_nama_minimal_3_karakter">Panjang nama minimal 3 karakter.</string>
+    <string name="berhasil_mendaftar_silahkan_masuk_untuk_melanjutkan">Berhasil mendaftar, silahkan masuk untuk melanjutkan.</string>
+    <string name="izin_ke_kamera_ditolak_fitur_tidak_bisa_digunakan">Izin ke kamera ditolak, fitur tidak bisa digunakan.</string>
+    <string name="izin_ke_lokasi_ditolak_fitur_tidak_bisa_digunakan">Izin ke lokasi ditolak, fitur tidak bisa digunakan.</string>
+    <string name="kamu_belum_memilih_gambar_gambar_wajib_diisi">Kamu belum memilih gambar, gambar wajib diisi.</string>
+    <string name="kamu_wajib_menceritakan_kisahmu">Kamu wajib menceritakan kisahmu.</string>
+    <string name="title_activity_maps" translatable="false">MapsActivity</string>
+    <string name="kirim_lokasi_sekarang">Kirim Lokasi Saat Ini</string>
+    <string name="map" translatable="false">Map</string>
 </resources>
