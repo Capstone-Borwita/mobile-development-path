@@ -147,6 +147,7 @@
 
                 <!-- Tentang Aplikasi -->
                 <LinearLayout
+                    android:id="@+id/list_tentang_aplikasi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
