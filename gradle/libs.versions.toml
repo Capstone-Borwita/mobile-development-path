@@ -1,5 +1,6 @@
 [versions]
 agp = "8.6.1"
+cameraxVersion = "1.5.0-alpha03"
 kotlin = "1.9.22"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -21,10 +22,17 @@ playServicesMaps = "19.0.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 lifecycleLivedataKtx = "2.8.7"
 lifecycleViewmodelKtx = "2.8.7"
-navigationFragmentKtx = "2.8.3"
-navigationUiKtx = "2.8.3"
+navigationFragmentKtx = "2.8.4"
+navigationUiKtx = "2.8.4"
 
 [libraries]
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraxVersion" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraxVersion" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraxVersion" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraxVersion" }
+androidx-camera-mlkit-vision = { module = "androidx.camera:camera-mlkit-vision", version.ref = "cameraxVersion" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraxVersion" }
+androidx-camera-video = { module = "androidx.camera:camera-video", version.ref = "cameraxVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
