@@ -1,4 +1,4 @@
-package com.untillness.borwita.ui.profile_edit
+package com.untillness.borwita.ui.toko_store
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -6,19 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.untillness.borwita.R
-import com.untillness.borwita.databinding.ActivityProfileEditBinding
 import com.untillness.borwita.helpers.Unfocus
 
-class ProfileEditActivity : Unfocus() {
-    private lateinit var binding: ActivityProfileEditBinding
-
+class TokoStoreActivity : Unfocus() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        this.binding = ActivityProfileEditBinding.inflate(layoutInflater)
-        setContentView(this.binding.root)
-
+        setContentView(R.layout.activity_toko_store)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -27,7 +21,7 @@ class ProfileEditActivity : Unfocus() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
-        title = "Ubah Profil"
+        title = "Tambah Toko"
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -6,8 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.untillness.borwita.R
+import com.untillness.borwita.helpers.Unfocus
 
-class ProfilePasswordActivity : AppCompatActivity() {
+class ProfilePasswordActivity : Unfocus() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
