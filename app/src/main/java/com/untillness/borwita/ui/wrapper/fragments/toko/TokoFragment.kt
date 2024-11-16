@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.databinding.FragmentTokoBinding
 import com.untillness.borwita.ui.about.AboutActivity
+import com.untillness.borwita.ui.toko_detail.TokoDetailActivity
 import com.untillness.borwita.ui.toko_store.TokoStoreActivity
 
 class TokoFragment : Fragment() {
@@ -41,10 +42,14 @@ class TokoFragment : Fragment() {
         _binding = null
     }
 
-    private fun triggers(){
+    private fun triggers() {
         this.binding.apply {
-            buttonFab.setOnClickListener{
+            buttonFab.setOnClickListener {
                 val intent = Intent(this@TokoFragment.context, TokoStoreActivity::class.java)
+                startActivity(intent)
+            }
+            emptyData.emptyDataButton.setOnClickListener {
+                val intent = Intent(this@TokoFragment.context, TokoDetailActivity::class.java)
                 startActivity(intent)
             }
         }
