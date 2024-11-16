@@ -13,9 +13,11 @@
         android:theme="@style/Theme.Borwita"
         tools:targetApi="31">
         <activity
+            android:name=".ui.profile_password.ProfilePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.profile_edit.ProfileEditActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".ui.wrapper.WrapperActivity"
             android:exported="false"

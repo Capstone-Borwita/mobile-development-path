@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.databinding.FragmentProfileBinding
 import com.untillness.borwita.ui.profile_edit.ProfileEditActivity
+import com.untillness.borwita.ui.profile_password.ProfilePasswordActivity
 
 class ProfileFragment : Fragment() {
 
@@ -33,6 +34,10 @@ class ProfileFragment : Fragment() {
         binding.apply {
             listUbahProfil.setOnClickListener{
                 val intent = Intent(this@ProfileFragment.context, ProfileEditActivity::class.java)
+                startActivity(intent)
+            }
+            listUbahKataSandi.setOnClickListener{
+                val intent = Intent(this@ProfileFragment.context, ProfilePasswordActivity::class.java)
                 startActivity(intent)
             }
         }
