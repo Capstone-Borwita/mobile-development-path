@@ -14,7 +14,6 @@ class ProfileEditActivity : Unfocus() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         this.binding = ActivityProfileEditBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
