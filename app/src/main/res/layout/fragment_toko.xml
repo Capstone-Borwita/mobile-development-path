@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="136dp"
+        android:layout_marginBottom="130dp"
         android:contentDescription="@string/deskripsi"
         android:text="Tambah Toko"
         app:icon="@drawable/baseline_add_24" />
