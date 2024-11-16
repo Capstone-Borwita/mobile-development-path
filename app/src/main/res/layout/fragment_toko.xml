@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.wrapper.fragments.toko.TokoFragment"
-    android:paddingTop="40dp">
+    android:paddingTop="?attr/actionBarSize">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -36,8 +36,7 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/pull_to_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="16dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,5 +69,17 @@
 
     </androidx.core.widget.NestedScrollView>
 
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+
+        android:id="@+id/button_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="136dp"
+        android:contentDescription="@string/deskripsi"
+        android:text="Tambah Toko"
+        app:icon="@drawable/baseline_add_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

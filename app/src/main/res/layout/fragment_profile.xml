@@ -88,7 +88,7 @@
                             android:layout_height="wrap_content"
                             android:text="Ubah Profil"
                             android:textColor="@color/black"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -134,7 +134,7 @@
                             android:layout_height="wrap_content"
                             android:text="Keamanan"
                             android:textColor="@color/black"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -180,7 +180,7 @@
                             android:layout_height="wrap_content"
                             android:text="Tentang Aplikasi"
                             android:textColor="@color/black"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -223,7 +223,7 @@
                             android:layout_height="wrap_content"
                             android:text="Versi Aplikasi"
                             android:textColor="@color/black"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -267,7 +267,7 @@
                             android:layout_height="wrap_content"
                             android:text="Ganti Akun"
                             android:textColor="@color/black"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
