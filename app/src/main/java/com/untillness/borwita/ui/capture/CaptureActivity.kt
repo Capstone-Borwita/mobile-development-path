@@ -70,24 +70,7 @@ class CaptureActivity : AppCompatActivity() {
 
         this.cropRectanglePreview()
 
-        val vto: ViewTreeObserver = binding.viewFinderWindow.viewTreeObserver
-
-        vto.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                binding.viewFinderWindow.viewTreeObserver.removeOnGlobalLayoutListener(this)
-
-                animator = ObjectAnimator.ofFloat(
-                    binding.scannerBar, "translationY", binding.viewFinderWindow.y,
-                    (binding.viewFinderWindow.y + binding.viewFinderWindow.height)
-                )
-                animator?.repeatMode = ValueAnimator.REVERSE
-                animator?.repeatCount = ValueAnimator.INFINITE
-                animator?.interpolator = AccelerateDecelerateInterpolator()
-                animator?.setDuration(3000)
-                animator?.start()
-            }
-        })
-
+        this.animateScanEffect()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -98,6 +81,28 @@ class CaptureActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+    }
+
+    private fun animateScanEffect() {
+        val vto: ViewTreeObserver = binding.viewFinderWindow.viewTreeObserver
+
+        vto.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.viewFinderWindow.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                animator = ObjectAnimator.ofFloat(
+                    binding.scannerBar,
+                    "translationY",
+                    binding.viewFinderWindow.y,
+                    (binding.viewFinderWindow.y + binding.viewFinderWindow.height)
+                )
+                animator?.repeatMode = ValueAnimator.REVERSE
+                animator?.repeatCount = ValueAnimator.INFINITE
+                animator?.interpolator = AccelerateDecelerateInterpolator()
+                animator?.setDuration(3000)
+                animator?.start()
+            }
+        })
     }
 
     private fun triggers() {
