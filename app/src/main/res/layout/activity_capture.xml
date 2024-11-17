@@ -16,6 +16,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <com.untillness.borwita.widgets.ViewFinderBackground
+        android:id="@+id/viewFinderBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:backgroundColor="@color/notFoundBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/viewFinderWindow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/viewFinderMargin"
+        android:layout_marginTop="@dimen/viewFinderMargin"
+        android:layout_marginEnd="@dimen/viewFinderMargin"
+        android:layout_marginBottom="@dimen/viewFinderMargin"
+        android:background="@drawable/shape_rectangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,200:126"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3">
+    </FrameLayout>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/image_capture_button"
         android:layout_width="70dp"

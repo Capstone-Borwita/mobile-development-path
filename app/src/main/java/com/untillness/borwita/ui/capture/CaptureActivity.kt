@@ -3,6 +3,7 @@ package com.untillness.borwita.ui.capture
 import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -35,10 +36,8 @@ class CaptureActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCaptureBinding
     private var imageCapture: ImageCapture? = null
 
-    private var videoCapture: VideoCapture<Recorder>? = null
-    private var recording: Recording? = null
-
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var viewFinderRect: Rect
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +67,17 @@ class CaptureActivity : AppCompatActivity() {
         binding.imageCaptureButton.setOnClickListener { takePhoto() }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+        binding.viewFinder.post {
+
+            viewFinderRect = Rect(
+                binding.viewFinderWindow.left,
+                binding.viewFinderWindow.top,
+                binding.viewFinderWindow.right,
+                binding.viewFinderWindow.bottom
+            )
+            binding.viewFinderBackground.setViewFinderRect(viewFinderRect)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -109,7 +119,6 @@ class CaptureActivity : AppCompatActivity() {
             })
     }
 
-    private fun captureVideo() {}
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
