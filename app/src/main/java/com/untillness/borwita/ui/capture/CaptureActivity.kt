@@ -55,7 +55,7 @@ class CaptureActivity : AppCompatActivity() {
 
         title = "Ambil Foto KTP"
 
-
+        cameraExecutor = Executors.newSingleThreadExecutor()
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -63,13 +63,28 @@ class CaptureActivity : AppCompatActivity() {
             requestPermissions()
         }
 
+        this.triggers()
+
+        this.cropRectanglePreview()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
+    }
+
+    private fun triggers() {
         // Set up the listeners for take photo and video capture buttons
         binding.imageCaptureButton.setOnClickListener { takePhoto() }
+    }
 
-        cameraExecutor = Executors.newSingleThreadExecutor()
-
+    private fun cropRectanglePreview() {
         binding.viewFinder.post {
-
             viewFinderRect = Rect(
                 binding.viewFinderWindow.left,
                 binding.viewFinderWindow.top,
@@ -78,11 +93,6 @@ class CaptureActivity : AppCompatActivity() {
             )
             binding.viewFinderBackground.setViewFinderRect(viewFinderRect)
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return super.onSupportNavigateUp()
     }
 
     private fun takePhoto() {
@@ -176,11 +186,6 @@ class CaptureActivity : AppCompatActivity() {
         } else {
             startCamera()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
     }
 
     companion object {
