@@ -66,7 +66,6 @@ class CaptureActivity : AppCompatActivity() {
 
         // Set up the listeners for take photo and video capture buttons
         binding.imageCaptureButton.setOnClickListener { takePhoto() }
-        binding.videoCaptureButton.setOnClickListener { captureVideo() }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
@@ -158,11 +157,10 @@ class CaptureActivity : AppCompatActivity() {
         // Handle Permission granted/rejected
         var permissionGranted = true
         permissions.entries.forEach {
-
-            AppHelpers.log(it.toString())
             if (it.key in REQUIRED_PERMISSIONS && !it.value) permissionGranted = false
         }
         if (!permissionGranted) {
+            finish()
             Toast.makeText(
                 baseContext, "Permission request denied", Toast.LENGTH_SHORT
             ).show()
