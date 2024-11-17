@@ -1,6 +1,8 @@
 package com.untillness.borwita.ui.capture
 
 import android.Manifest
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.graphics.Rect
@@ -8,8 +10,10 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
@@ -17,19 +21,16 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.untillness.borwita.R
 import com.untillness.borwita.databinding.ActivityCaptureBinding
-import com.untillness.borwita.helpers.AppHelpers
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+
 
 class CaptureActivity : AppCompatActivity() {
 
@@ -38,6 +39,8 @@ class CaptureActivity : AppCompatActivity() {
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var viewFinderRect: Rect
+
+    var animator: ObjectAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +69,25 @@ class CaptureActivity : AppCompatActivity() {
         this.triggers()
 
         this.cropRectanglePreview()
+
+        val vto: ViewTreeObserver = binding.viewFinderWindow.viewTreeObserver
+
+        vto.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.viewFinderWindow.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                animator = ObjectAnimator.ofFloat(
+                    binding.scannerBar, "translationY", binding.viewFinderWindow.y,
+                    (binding.viewFinderWindow.y + binding.viewFinderWindow.height)
+                )
+                animator?.repeatMode = ValueAnimator.REVERSE
+                animator?.repeatCount = ValueAnimator.INFINITE
+                animator?.interpolator = AccelerateDecelerateInterpolator()
+                animator?.setDuration(3000)
+                animator?.start()
+            }
+        })
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

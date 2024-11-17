@@ -46,6 +46,14 @@
         app:layout_constraintVertical_bias="0.3">
     </FrameLayout>
 
+
+    <View
+        android:id="@+id/scannerBar"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/md_theme_error"
+        tools:ignore="MissingConstraints" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/image_capture_button"
         android:layout_width="70dp"
