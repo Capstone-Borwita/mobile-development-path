@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.onCreate()
+        this.initState()
 
         this.triggers()
 
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun onCreate() {
+    private fun initState() {
         this.homeViewModel.loadProfile(this.requireContext())
     }
 
@@ -94,6 +94,10 @@ class HomeFragment : Fragment() {
 
                             widgetHeaderHome.textName.text = "-"
                         }
+
+                        doLogout(fragment = this@HomeFragment, removeSessions = {
+                            this@HomeFragment.homeViewModel.removeToken()
+                        })
                     }
 
                     is ApiState.Success -> {
