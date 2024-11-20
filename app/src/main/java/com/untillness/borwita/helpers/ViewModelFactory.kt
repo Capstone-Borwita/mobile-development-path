@@ -2,11 +2,13 @@ package com.untillness.borwita.helpers
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.MainViewModel
 import com.untillness.borwita.ui.login.LoginViewModel
 import com.untillness.borwita.ui.register.RegisterViewModel
+import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileViewModel
 
 class ViewModelFactory private constructor(private val mApplication: Application) :
     ViewModelProvider.NewInstanceFactory() {
@@ -30,6 +32,10 @@ class ViewModelFactory private constructor(private val mApplication: Application
             val factory = getInstance(activity.application)
             return ViewModelProvider(activity, factory)[T::class.java]
         }
+        inline fun <reified T : ViewModel> fromFragment(activity: FragmentActivity): T {
+            val factory = getInstance(activity.application)
+            return ViewModelProvider(activity, factory)[T::class.java]
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -42,6 +48,9 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             return MainViewModel(mApplication) as T
+        }
+        if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
+            return ProfileViewModel(mApplication) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

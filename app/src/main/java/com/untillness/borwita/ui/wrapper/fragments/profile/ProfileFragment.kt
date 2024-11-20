@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.R
 import com.untillness.borwita.databinding.FragmentProfileBinding
+import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.about.AboutActivity
 import com.untillness.borwita.ui.login.LoginActivity
 import com.untillness.borwita.ui.profile_edit.ProfileEditActivity
@@ -20,6 +21,7 @@ import com.untillness.borwita.widgets.AppDialog
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
+    private lateinit var profileViewModel: ProfileViewModel
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -28,7 +30,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        this.profileViewModel = ViewModelFactory.fromFragment<ProfileViewModel>(this.requireActivity())
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -81,8 +83,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun doLogout() {
-//        homeViewModel.removeName()
-//        homeViewModel.removeToken()
+        this.profileViewModel.removeToken()
 
         val intent = Intent(this.context, LoginActivity::class.java)
         startActivity(intent)
