@@ -37,7 +37,7 @@ class WrapperViewModel(
         this.loadProfile(context)
     }
 
-    fun loadProfile(context: Context) {
+    private fun loadProfile(context: Context) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
             _profileState.postValue(
                 ApiState.Error(
