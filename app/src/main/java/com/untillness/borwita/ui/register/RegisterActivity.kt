@@ -137,9 +137,9 @@ class RegisterActivity : Unfocus() {
             return
         }
 
-            val nameReqBody = binding.fieldName.editText?.text.toString().toRequestBody("text/plain".toMediaType())
-            val emailReqBody = binding.fieldEmail.editText?.text.toString().toRequestBody("text/plain".toMediaType())
-            val passwordReqBody = binding.fieldPassword.editText?.text.toString().toRequestBody("text/plain".toMediaType())
+        val nameReqBody = binding.fieldName.editText?.text.toString().toRequestBody()
+        val emailReqBody = binding.fieldEmail.editText?.text.toString().toRequestBody()
+        val passwordReqBody = binding.fieldPassword.editText?.text.toString().toRequestBody()
 
         this.registerViewModel.doRegister(
             context = this,

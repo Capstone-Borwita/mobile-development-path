@@ -7,7 +7,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
+import com.untillness.borwita.data.remote.requests.LoginRequest
+import com.untillness.borwita.data.states.ApiState
 import com.untillness.borwita.databinding.ActivityLoginBinding
+import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.register.RegisterActivity
@@ -21,8 +24,6 @@ class LoginActivity : Unfocus() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        enableEdgeToEdge()
 
         this.binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
@@ -42,46 +43,46 @@ class LoginActivity : Unfocus() {
     }
 
     private fun listeners() {
-//        this.loginViewModel.apply {
-//            this.loginState.observe(this@LoginActivity) {
-//                when (it) {
-//                    LoginState.Loading -> {
-//                        appDialog.showLoadingDialog()
-//                    }
-//
-//                    LoginState.Standby -> {
-//                        appDialog.hideLoadingDialog()
-//                    }
-//
-//                    is LoginState.Error -> {
-//                        appDialog.hideLoadingDialog()
-//                        AppDialog.error(
-//                            this@LoginActivity, message = it.message
-//                        )
-//                    }
-//
-//                    is LoginState.Success -> {
-//                        appDialog.hideLoadingDialog()
-//                        AppDialog.success(
-//                            this@LoginActivity,
-//                            message = getString(R.string.berhasil_masuk),
-//                            callback = object : AppDialog.Companion.AppDialogCallback {
-//
-//                                override fun onDismiss() {
-//                                    val intent =
-//                                        Intent(this@LoginActivity, HomeActivity::class.java)
-//                                    startActivity(intent)
-//                                    finish()
-//                                }
-//
-//                                override fun onConfirm() {
-//                                }
-//                            },
-//                        )
-//                    }
-//                }
-//            }
-//        }
+        this.loginViewModel.apply {
+            this.loginState.observe(this@LoginActivity) {
+                when (it) {
+                    ApiState.Loading -> {
+                        appDialog.showLoadingDialog()
+                    }
+
+                    ApiState.Standby -> {
+                        appDialog.hideLoadingDialog()
+                    }
+
+                    is ApiState.Error -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.error(
+                            this@LoginActivity, message = it.message
+                        )
+                    }
+
+                    is ApiState.Success<*> -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.success(
+                            this@LoginActivity,
+                            message = getString(R.string.berhasil_masuk),
+                            callback = object : AppDialog.Companion.AppDialogCallback {
+
+                                override fun onDismiss() {
+                                    val intent =
+                                        Intent(this@LoginActivity, WrapperActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                }
+
+                                override fun onConfirm() {
+                                }
+                            },
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun triggers() {
@@ -114,30 +115,26 @@ class LoginActivity : Unfocus() {
     }
 
     private fun doLogin() {
-//        if (listOf(
-//                hasEmptyFields(), hasErrorFields()
-//            ).contains(true)
-//        ) {
-//            Snackbar.make(
-//                this.binding.root,
-//                getString(R.string.silahkan_mengisi_field_diatas_terlebih_dahulu),
-//                Snackbar.LENGTH_SHORT
-//            ).show()
-//            return
-//        }
+        if (listOf(
+                hasEmptyFields(), hasErrorFields()
+            ).contains(true)
+        ) {
+            Snackbar.make(
+                this.binding.root,
+                getString(R.string.silahkan_mengisi_field_diatas_terlebih_dahulu),
+                Snackbar.LENGTH_SHORT
+            ).show()
+            return
+        }
 
-        val intent = Intent(this@LoginActivity, WrapperActivity::class.java)
-        startActivity(intent)
-        finish()
+        val req = LoginRequest(
+            email = AppHelpers.makeRequestBody(binding.fieldEmail.editText?.text.toString()),
+            password = AppHelpers.makeRequestBody(binding.fieldPassword.editText?.text.toString()),
+        )
 
-//        val req = LoginRequest(
-//            email = binding.fieldEmail.editText?.text.toString(),
-//            password = binding.fieldPassword.editText?.text.toString(),
-//        )
-//
-//        loginViewModel.doLogin(
-//            context = this,
-//            request = req,
-//        )
+        loginViewModel.doLogin(
+            context = this,
+            request = req,
+        )
     }
 }

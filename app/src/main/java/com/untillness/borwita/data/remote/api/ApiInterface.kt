@@ -23,9 +23,12 @@ interface ApiInterface {
         @Part("password") password: RequestBody,
     ): Response<RegisterResponse>
 
-
+    @Multipart
     @POST("/api/v1/auth/login")
-    suspend fun login(@Body req: LoginRequest): Response<LoginResponse>
+    suspend fun login(
+        @Part("email") email: RequestBody,
+        @Part("password") password: RequestBody,
+    ): Response<LoginResponse>
 
 //    @GET("/v1/stories")
 //    suspend fun getAllStoriesWithLocation(

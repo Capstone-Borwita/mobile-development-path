@@ -2,6 +2,9 @@ package com.untillness.borwita.helpers
 
 import android.util.Log
 import android.view.View
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -46,6 +49,11 @@ class AppHelpers {
             val fileSizeInBytes = file.length()
             val fileSizeInMB = fileSizeInBytes / (1024.0 * 1024)
             return "Size $fileSizeInMB MB"
+        }
+
+        fun makeRequestBody(value: String?): RequestBody {
+            return value?.toRequestBody("text/plain".toMediaType())
+                ?: "".toRequestBody("text/plain".toMediaType())
         }
     }
 }

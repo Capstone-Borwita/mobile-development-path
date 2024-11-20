@@ -14,6 +14,7 @@ class AuthRepository {
     )
 
     suspend fun login(req: LoginRequest) = Api.getApiService().login(
-        req
+        email = req.email,
+        password = req.password,
     )
 }
