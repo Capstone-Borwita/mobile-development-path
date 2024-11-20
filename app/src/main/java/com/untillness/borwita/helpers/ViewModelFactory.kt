@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.untillness.borwita.MainViewModel
 import com.untillness.borwita.ui.login.LoginViewModel
 import com.untillness.borwita.ui.register.RegisterViewModel
 
@@ -38,6 +39,9 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
         if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
             return RegisterViewModel() as T
+        }
+        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            return MainViewModel(mApplication) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
