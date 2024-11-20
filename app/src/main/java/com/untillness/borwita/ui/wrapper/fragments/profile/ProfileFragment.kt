@@ -41,8 +41,6 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.initState()
-
         this.triggers()
 
         this.listeners()
@@ -54,11 +52,6 @@ class ProfileFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun initState() {
-        this.profileViewModel.loadProfile(this.requireContext())
-    }
-
 
     private fun listeners() {
         this.profileViewModel.apply {
@@ -96,8 +89,7 @@ class ProfileFragment : Fragment() {
 
                             Glide.with(this@ProfileFragment).load(it.data.data?.avatarPath ?: "-")
                                 .placeholder(AppHelpers.circularProgressDrawable(this@ProfileFragment.requireContext()))
-                                .fitCenter()
-                                .into(widgetProfileSection.imageProfile)
+                                .fitCenter().into(widgetProfileSection.imageProfile)
                         }
                     }
                 }
@@ -108,7 +100,7 @@ class ProfileFragment : Fragment() {
     private fun triggers() {
         binding.apply {
             refreshIndicator.setOnRefreshListener {
-                this@ProfileFragment.initState()
+                this@ProfileFragment.profileViewModel.initState(this@ProfileFragment.requireContext())
                 refreshIndicator.isRefreshing = false
             }
             listUbahProfil.setOnClickListener {

@@ -31,6 +31,14 @@ class HomeViewModel(
     private val _profileState = MutableLiveData<ApiState<ProfileResponse>>(ApiState.Loading)
     val profileState: LiveData<ApiState<ProfileResponse>> = _profileState
 
+    init {
+        this.initState(context)
+    }
+
+    fun initState(context: Context) {
+        this.loadProfile(context)
+    }
+
     fun removeToken() {
         return sharePrefRepository.removeToken()
     }

@@ -32,6 +32,15 @@ class ProfileViewModel(
     private val _profileState = MutableLiveData<ApiState<ProfileResponse>>(ApiState.Loading)
     val profileState: LiveData<ApiState<ProfileResponse>> = _profileState
 
+    init {
+        this.initState(context)
+    }
+
+    fun initState(context: Context) {
+        this.loadProfile(context)
+    }
+
+
     fun removeToken() {
         return sharePrefRepository.removeToken()
     }
@@ -68,8 +77,7 @@ class ProfileViewModel(
 
             _profileState.postValue(
                 ApiState.Success(
-                    data = profileResponse,
-                    message = "Berhasil"
+                    data = profileResponse, message = "Berhasil"
                 )
             )
         }

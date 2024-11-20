@@ -39,8 +39,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.initState()
-
         this.triggers()
 
         this.listeners()
@@ -53,14 +51,10 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun initState() {
-        this.homeViewModel.loadProfile(this.requireContext())
-    }
-
     private fun triggers() {
         this.binding.apply {
             refreshIndicator.setOnRefreshListener {
-                this@HomeFragment.initState()
+                this@HomeFragment.homeViewModel.initState(this@HomeFragment.requireContext())
                 refreshIndicator.isRefreshing = false
             }
             widgetHeaderHome.buttonLogout.setOnClickListener {
