@@ -10,10 +10,13 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.responses.ProfileResponse
 import com.untillness.borwita.data.states.ApiState
 import com.untillness.borwita.databinding.FragmentHomeBinding
+import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.wrapper.WrapperActivity
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileFragment.Companion.doLogout
@@ -104,6 +107,10 @@ class HomeFragment : Fragment() {
                             widgetHeaderHomeShimmer.isVisible = false
 
                             widgetHeaderHome.textName.text = it.data.data?.name ?: "-"
+
+                            Glide.with(this@HomeFragment).load(it.data.data?.avatarPath ?: "-")
+                                .placeholder(AppHelpers.circularProgressDrawable(this@HomeFragment.requireContext()))
+                                .fitCenter().into(widgetHeaderHome.avatar)
                         }
                     }
                 }

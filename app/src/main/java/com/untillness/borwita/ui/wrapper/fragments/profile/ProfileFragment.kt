@@ -10,9 +10,12 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
 import com.untillness.borwita.R
 import com.untillness.borwita.data.states.ApiState
 import com.untillness.borwita.databinding.FragmentProfileBinding
+import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.about.AboutActivity
 import com.untillness.borwita.ui.login.LoginActivity
@@ -90,6 +93,11 @@ class ProfileFragment : Fragment() {
 
                             widgetProfileSection.textNameProfile.text = it.data.data?.name ?: "-"
                             widgetProfileSection.textEmailProfile.text = it.data.data?.email ?: "-"
+
+                            Glide.with(this@ProfileFragment).load(it.data.data?.avatarPath ?: "-")
+                                .placeholder(AppHelpers.circularProgressDrawable(this@ProfileFragment.requireContext()))
+                                .fitCenter()
+                                .into(widgetProfileSection.imageProfile)
                         }
                     }
                 }

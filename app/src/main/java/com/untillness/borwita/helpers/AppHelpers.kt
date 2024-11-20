@@ -1,7 +1,9 @@
 package com.untillness.borwita.helpers
 
+import android.content.Context
 import android.util.Log
 import android.view.View
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -54,6 +56,14 @@ class AppHelpers {
         fun makeRequestBody(value: String?): RequestBody {
             return value?.toRequestBody("text/plain".toMediaType())
                 ?: "".toRequestBody("text/plain".toMediaType())
+        }
+
+        fun circularProgressDrawable(context: Context): CircularProgressDrawable {
+            return CircularProgressDrawable(context).apply {
+                strokeWidth = 5f
+                centerRadius = 30f
+                start()
+            }
         }
     }
 }
