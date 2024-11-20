@@ -18,11 +18,17 @@ class AppDialog(context: Context) : Dialog(context) {
             MaterialAlertDialogBuilder(
                 context,
                 com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
-            ).setTitle(context.getString(R.string.gagal)).setIcon(R.drawable.outline_cancel_24)
-                .setMessage(message ?: context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi))
+            )
+                .setTitle(context.getString(R.string.gagal))
+                .setIcon(R.drawable.outline_cancel_24)
+                .setMessage(
+                    message
+                        ?: context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
+                )
                 .setPositiveButton(context.getString(R.string.tutup)) { dialog, _ ->
                     dialog.dismiss()
-                }.show()
+                }
+                .show()
         }
 
         fun success(
@@ -31,8 +37,10 @@ class AppDialog(context: Context) : Dialog(context) {
             MaterialAlertDialogBuilder(
                 context,
                 com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered,
-            ).setTitle(context.getString(R.string.berhasil)).setIcon(R.drawable.baseline_check_circle_outline_24)
-                .setMessage(message ?: context.getString(R.string.proses_telah_selesai)).setOnDismissListener {
+            ).setTitle(context.getString(R.string.berhasil))
+                .setIcon(R.drawable.baseline_check_circle_outline_24)
+                .setMessage(message ?: context.getString(R.string.proses_telah_selesai))
+                .setOnDismissListener {
                     callback?.onDismiss()
                 }.setPositiveButton(context.getString(R.string.ok)) { dialog, _ ->
                     dialog.dismiss()
@@ -48,7 +56,8 @@ class AppDialog(context: Context) : Dialog(context) {
             MaterialAlertDialogBuilder(
                 context,
                 com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered,
-            ).setTitle(title ?: context.getString(R.string.berhasil)).setMessage(message ?: context.getString(R.string.proses_telah_selesai))
+            ).setTitle(title ?: context.getString(R.string.berhasil))
+                .setMessage(message ?: context.getString(R.string.proses_telah_selesai))
                 .setNegativeButton(context.getString(R.string.batalkan)) { dialog, _ ->
                     dialog.dismiss()
                 }.setPositiveButton(context.getString(R.string.ya)) { dialog, _ ->
