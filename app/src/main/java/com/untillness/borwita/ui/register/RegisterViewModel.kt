@@ -19,8 +19,8 @@ import okhttp3.RequestBody
 class RegisterViewModel : ViewModel() {
     private var authRepository: AuthRepository = AuthRepository()
 
-    private val _registerState = MutableLiveData<ApiState>(ApiState.Standby)
-    val registerState: LiveData<ApiState> = _registerState
+    private val _registerState = MutableLiveData<ApiState<RegisterResponse>>(ApiState.Standby)
+    val registerState: LiveData<ApiState<RegisterResponse>> = _registerState
 
     fun doRegister(
         context: Context,

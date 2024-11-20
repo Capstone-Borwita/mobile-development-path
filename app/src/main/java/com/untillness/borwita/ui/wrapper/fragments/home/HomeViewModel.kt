@@ -23,8 +23,8 @@ class HomeViewModel(
 ) : ViewModel() {
     private val profileRepository: ProfileRepository = ProfileRepository()
 
-    private val _profileState = MutableLiveData<ApiState>(ApiState.Standby)
-    val profileState: LiveData<ApiState> = _profileState
+    private val _profileState = MutableLiveData<ApiState<ProfileResponse>>(ApiState.Loading)
+    val profileState: LiveData<ApiState<ProfileResponse>> = _profileState
 
     private var sharePrefRepository: SharePrefRepository = SharePrefRepository(
         context = context,
@@ -68,7 +68,7 @@ class HomeViewModel(
             _profileState.postValue(
                 ApiState.Success(
                     data = profileResponse,
-                    message = "Berhasil Login"
+                    message = "Berhasil"
                 )
             )
         }

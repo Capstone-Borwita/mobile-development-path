@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.wrapper.fragments.home.HomeFragment"
-    android:paddingTop="?attr/actionBarSize">
+    android:paddingTop="?attr/actionBarSize"
+    tools:context=".ui.wrapper.fragments.home.HomeFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_indicator"
@@ -22,11 +22,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <include
                     android:id="@+id/widget_header_home"
                     layout="@layout/widget_header_home" />
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/widget_header_home_shimmer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include layout="@layout/widget_header_home_shimmer" />
+                </com.facebook.shimmer.ShimmerFrameLayout>
             </LinearLayout>
 
             <LinearLayout

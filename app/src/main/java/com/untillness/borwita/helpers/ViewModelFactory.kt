@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.MainViewModel
 import com.untillness.borwita.ui.login.LoginViewModel
 import com.untillness.borwita.ui.register.RegisterViewModel
+import com.untillness.borwita.ui.wrapper.fragments.home.HomeViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileViewModel
 
 class ViewModelFactory private constructor(private val mApplication: Application) :
@@ -45,6 +46,9 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
         if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
             return RegisterViewModel() as T
+        }
+        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+            return HomeViewModel(mApplication) as T
         }
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             return MainViewModel(mApplication) as T

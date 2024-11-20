@@ -22,8 +22,8 @@ class LoginViewModel(application: Application) : ViewModel() {
     private val authRepository: AuthRepository = AuthRepository()
     private val sharePrefRepository: SharePrefRepository = SharePrefRepository(application)
 
-    private val _loginState = MutableLiveData<ApiState>(ApiState.Standby)
-    val loginState: LiveData<ApiState> = _loginState
+    private val _loginState = MutableLiveData<ApiState<LoginResponse>>(ApiState.Standby)
+    val loginState: LiveData<ApiState<LoginResponse>> = _loginState
 
     private fun storeToken(token: String) {
         sharePrefRepository.setToken(

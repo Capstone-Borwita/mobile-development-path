@@ -3,6 +3,7 @@ package com.untillness.borwita.data.remote.api
 import com.untillness.borwita.data.remote.requests.LoginRequest
 import com.untillness.borwita.data.remote.responses.ErrorResponse
 import com.untillness.borwita.data.remote.responses.LoginResponse
+import com.untillness.borwita.data.remote.responses.ProfileResponse
 import com.untillness.borwita.data.remote.responses.RegisterResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -30,10 +31,9 @@ interface ApiInterface {
         @Part("password") password: RequestBody,
     ): Response<LoginResponse>
 
-//    @GET("/v1/stories")
-//    suspend fun getAllStoriesWithLocation(
-//        @Query("location") location: Int = 1
-//    ): Response<StoryResponse>
+    @GET("/api/v1/auth/profile")
+    suspend fun profile(): Response<ProfileResponse>
+
 //
 //    @GET("/v1/stories")
 //    suspend fun getAllStories(

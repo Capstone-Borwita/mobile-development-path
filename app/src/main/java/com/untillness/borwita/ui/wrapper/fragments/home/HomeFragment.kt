@@ -1,16 +1,21 @@
 package com.untillness.borwita.ui.wrapper.fragments.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.R
+import com.untillness.borwita.data.remote.responses.ProfileResponse
+import com.untillness.borwita.data.states.ApiState
 import com.untillness.borwita.databinding.FragmentHomeBinding
 import com.untillness.borwita.helpers.ViewModelFactory
+import com.untillness.borwita.ui.wrapper.WrapperActivity
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileFragment.Companion.doLogout
 import com.untillness.borwita.widgets.AppDialog
 
@@ -49,15 +54,55 @@ class HomeFragment : Fragment() {
         this.homeViewModel.loadProfile(this.requireContext())
     }
 
-    private fun triggers() {}
-
-    private fun listeners() {
+    private fun triggers() {
         this.binding.apply {
-            widgetHeaderHome.buttonLogout.setOnClickListener{
+            widgetHeaderHome.buttonLogout.setOnClickListener {
                 this@HomeFragment.confirmLogout(this@HomeFragment.requireContext())
             }
         }
     }
+
+    private fun listeners() {
+        this.homeViewModel.apply {
+            profileState.observe(viewLifecycleOwner) {
+
+                when (it) {
+                    ApiState.Loading -> {
+                        this@HomeFragment.binding.apply {
+                            widgetHeaderHome.main.isVisible = false
+                            widgetHeaderHomeShimmer.isVisible = true
+                        }
+                    }
+
+                    ApiState.Standby -> {
+                        this@HomeFragment.binding.apply {
+                            widgetHeaderHome.main.isVisible = false
+                            widgetHeaderHomeShimmer.isVisible = false
+                        }
+                    }
+
+                    is ApiState.Error -> {
+                        this@HomeFragment.binding.apply {
+                            widgetHeaderHome.main.isVisible = true
+                            widgetHeaderHomeShimmer.isVisible = false
+
+                            widgetHeaderHome.textName.text = "-"
+                        }
+                    }
+
+                    is ApiState.Success -> {
+                        this@HomeFragment.binding.apply {
+                            widgetHeaderHome.main.isVisible = true
+                            widgetHeaderHomeShimmer.isVisible = false
+
+                            widgetHeaderHome.textName.text = it.data.data?.name ?: "-"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun confirmLogout(context: Context) {
         AppDialog.confirm(context,
             title = getString(R.string.keluar_dari_akun),
