@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.R
+import com.untillness.borwita.data.states.ApiState
 import com.untillness.borwita.databinding.FragmentProfileBinding
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.about.AboutActivity
@@ -36,7 +38,11 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        this.initState()
+
         this.triggers()
+
+        this.listeners()
 
         return root
     }
@@ -44,6 +50,51 @@ class ProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initState() {
+        this.profileViewModel.loadProfile(this.requireContext())
+    }
+
+
+    private fun listeners() {
+        this.profileViewModel.apply {
+            profileState.observe(viewLifecycleOwner) {
+
+                when (it) {
+                    ApiState.Loading -> {
+                        this@ProfileFragment.binding.apply {
+                            widgetProfileSection.main.isVisible = false
+                            widgetProfileSectionShimmer.main.isVisible = true
+                        }
+                    }
+
+                    ApiState.Standby -> {
+                        this@ProfileFragment.binding.apply {
+                            widgetProfileSection.main.isVisible = false
+                            widgetProfileSectionShimmer.main.isVisible = false
+                        }
+                    }
+
+                    is ApiState.Error -> {
+                        this@ProfileFragment.binding.apply {
+                            widgetProfileSection.main.isVisible = false
+                            widgetProfileSectionShimmer.main.isVisible = false
+                        }
+                    }
+
+                    is ApiState.Success -> {
+                        this@ProfileFragment.binding.apply {
+                            widgetProfileSection.main.isVisible = true
+                            widgetProfileSectionShimmer.main.isVisible = false
+
+                            widgetProfileSection.textNameProfile.text = it.data.data?.name ?: "-"
+                            widgetProfileSection.textEmailProfile.text = it.data.data?.email ?: "-"
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun triggers() {

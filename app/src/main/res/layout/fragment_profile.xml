@@ -4,43 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="16dp"
     android:clipToPadding="false"
+    android:paddingHorizontal="16dp"
     tools:context=".ui.wrapper.fragments.profile.ProfileFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="128dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="128dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="140dp"
-            app:cardCornerRadius="1000dp">
+        <include
+            android:id="@+id/widget_profile_section"
+            layout="@layout/widget_profile_section" />
 
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:contentDescription="@string/deskripsi"
-                android:src="@drawable/ic_launcher_background" />
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Muhammad Abdullah Said"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="mas.said3000@gmail.com"
-            android:textSize="16sp" />
+        <include
+            android:id="@+id/widget_profile_section_shimmer"
+            layout="@layout/widget_profile_section_shimmer" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
