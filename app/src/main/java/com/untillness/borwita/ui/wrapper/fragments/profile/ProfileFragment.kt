@@ -30,12 +30,13 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        this.profileViewModel = ViewModelFactory.fromFragment<ProfileViewModel>(this.requireActivity())
+        this.profileViewModel =
+            ViewModelFactory.fromFragment<ProfileViewModel>(this.requireActivity())
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.triggers(context = requireContext())
+        this.triggers()
 
         return root
     }
@@ -45,7 +46,7 @@ class ProfileFragment : Fragment() {
         _binding = null
     }
 
-    private fun triggers(context: Context) {
+    private fun triggers() {
         binding.apply {
             listUbahProfil.setOnClickListener {
                 val intent = Intent(this@ProfileFragment.context, ProfileEditActivity::class.java)
@@ -61,7 +62,7 @@ class ProfileFragment : Fragment() {
                 startActivity(intent)
             }
             listLogout.setOnClickListener {
-                this@ProfileFragment.confirmLogout(context)
+                this@ProfileFragment.confirmLogout(this@ProfileFragment.requireContext())
             }
         }
     }
@@ -76,18 +77,23 @@ class ProfileFragment : Fragment() {
                 }
 
                 override fun onConfirm() {
-                    doLogout()
+                    doLogout(fragment = this@ProfileFragment, removeSessions = {
+                        this@ProfileFragment.profileViewModel.removeToken()
+                    })
                 }
 
             })
     }
 
-    private fun doLogout() {
-        this.profileViewModel.removeToken()
 
-        val intent = Intent(this.context, LoginActivity::class.java)
-        startActivity(intent)
-        activity?.finish()
+    companion object {
+        fun doLogout(fragment: Fragment, removeSessions: () -> Unit) {
+            removeSessions()
+
+            val intent = Intent(fragment.requireContext(), LoginActivity::class.java)
+            fragment.requireContext().startActivity(intent)
+            fragment.requireActivity().finish()
+        }
     }
 
 }
