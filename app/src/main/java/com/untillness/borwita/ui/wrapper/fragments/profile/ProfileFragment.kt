@@ -99,6 +99,10 @@ class ProfileFragment : Fragment() {
 
     private fun triggers() {
         binding.apply {
+            refreshIndicator.setOnRefreshListener {
+                this@ProfileFragment.initState()
+                refreshIndicator.isRefreshing = false
+            }
             listUbahProfil.setOnClickListener {
                 val intent = Intent(this@ProfileFragment.context, ProfileEditActivity::class.java)
                 startActivity(intent)
