@@ -19,6 +19,7 @@ import com.untillness.borwita.databinding.FragmentHomeBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.wrapper.WrapperActivity
+import com.untillness.borwita.ui.wrapper.WrapperViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileFragment.Companion.doLogout
 import com.untillness.borwita.widgets.AppDialog
 
@@ -26,6 +27,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var wrapperViewModel: WrapperViewModel
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,6 +36,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        this.wrapperViewModel = ViewModelFactory.fromFragment<WrapperViewModel>(this.requireActivity())
         this.homeViewModel = ViewModelFactory.fromFragment<HomeViewModel>(this.requireActivity())
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -54,7 +57,7 @@ class HomeFragment : Fragment() {
     private fun triggers() {
         this.binding.apply {
             refreshIndicator.setOnRefreshListener {
-                this@HomeFragment.homeViewModel.initState(this@HomeFragment.requireContext())
+                this@HomeFragment.wrapperViewModel.initState(this@HomeFragment.requireContext())
                 refreshIndicator.isRefreshing = false
             }
             widgetHeaderHome.buttonLogout.setOnClickListener {
@@ -64,7 +67,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun listeners() {
-        this.homeViewModel.apply {
+        this.wrapperViewModel.apply {
             profileState.observe(viewLifecycleOwner) {
 
                 when (it) {

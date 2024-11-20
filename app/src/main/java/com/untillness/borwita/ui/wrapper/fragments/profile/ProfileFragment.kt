@@ -21,12 +21,14 @@ import com.untillness.borwita.ui.about.AboutActivity
 import com.untillness.borwita.ui.login.LoginActivity
 import com.untillness.borwita.ui.profile_edit.ProfileEditActivity
 import com.untillness.borwita.ui.profile_password.ProfilePasswordActivity
+import com.untillness.borwita.ui.wrapper.WrapperViewModel
 import com.untillness.borwita.widgets.AppDialog
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var wrapperViewModel: WrapperViewModel
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -37,6 +39,8 @@ class ProfileFragment : Fragment() {
     ): View {
         this.profileViewModel =
             ViewModelFactory.fromFragment<ProfileViewModel>(this.requireActivity())
+        this.wrapperViewModel =
+            ViewModelFactory.fromFragment<WrapperViewModel>(this.requireActivity())
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -54,7 +58,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun listeners() {
-        this.profileViewModel.apply {
+        this.wrapperViewModel.apply {
             profileState.observe(viewLifecycleOwner) {
 
                 when (it) {
@@ -100,7 +104,7 @@ class ProfileFragment : Fragment() {
     private fun triggers() {
         binding.apply {
             refreshIndicator.setOnRefreshListener {
-                this@ProfileFragment.profileViewModel.initState(this@ProfileFragment.requireContext())
+                this@ProfileFragment.wrapperViewModel.initState(this@ProfileFragment.requireContext())
                 refreshIndicator.isRefreshing = false
             }
             listUbahProfil.setOnClickListener {
