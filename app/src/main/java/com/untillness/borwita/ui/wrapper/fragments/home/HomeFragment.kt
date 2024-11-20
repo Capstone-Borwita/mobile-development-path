@@ -1,5 +1,6 @@
 package com.untillness.borwita.ui.wrapper.fragments.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,36 +8,70 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.untillness.borwita.R
 import com.untillness.borwita.databinding.FragmentHomeBinding
+import com.untillness.borwita.helpers.ViewModelFactory
+import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileFragment.Companion.doLogout
+import com.untillness.borwita.widgets.AppDialog
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
+    private lateinit var homeViewModel: HomeViewModel
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        this.homeViewModel = ViewModelFactory.fromFragment<HomeViewModel>(this.requireActivity())
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textHome
-//        homeViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
+        this.onCreate()
+
+        this.triggers()
+
+        this.listeners()
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun onCreate() {
+        this.homeViewModel.loadProfile(this.requireContext())
+    }
+
+    private fun triggers() {}
+
+    private fun listeners() {
+        this.binding.apply {
+            widgetHeaderHome.buttonLogout.setOnClickListener{
+                this@HomeFragment.confirmLogout(this@HomeFragment.requireContext())
+            }
+        }
+    }
+    private fun confirmLogout(context: Context) {
+        AppDialog.confirm(context,
+            title = getString(R.string.keluar_dari_akun),
+            message = getString(R.string.kamu_akan_keluar_dari_akun_dan_harus_masuk_kembali),
+            callback = object : AppDialog.Companion.AppDialogCallback {
+                override fun onDismiss() {
+                }
+
+                override fun onConfirm() {
+                    doLogout(fragment = this@HomeFragment, removeSessions = {
+                        this@HomeFragment.homeViewModel.removeToken()
+                    })
+                }
+
+            })
     }
 }
