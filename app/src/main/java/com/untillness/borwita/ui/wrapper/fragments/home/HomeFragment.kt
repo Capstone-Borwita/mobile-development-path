@@ -56,6 +56,12 @@ class HomeFragment : Fragment() {
 
     private fun triggers() {
         this.binding.apply {
+            refreshIndicator.setOnRefreshListener {
+                this@HomeFragment.homeViewModel.apply {
+                    loadProfile(this@HomeFragment.requireContext())
+                }
+                refreshIndicator.isRefreshing = false
+            }
             widgetHeaderHome.buttonLogout.setOnClickListener {
                 this@HomeFragment.confirmLogout(this@HomeFragment.requireContext())
             }
