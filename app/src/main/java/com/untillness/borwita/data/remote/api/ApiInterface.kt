@@ -1,6 +1,7 @@
 package com.untillness.borwita.data.remote.api
 
 import com.untillness.borwita.data.remote.requests.LoginRequest
+import com.untillness.borwita.data.remote.responses.BaseResponse
 import com.untillness.borwita.data.remote.responses.ErrorResponse
 import com.untillness.borwita.data.remote.responses.LoginResponse
 import com.untillness.borwita.data.remote.responses.ProfileResponse
@@ -12,6 +13,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Query
 
@@ -33,6 +35,13 @@ interface ApiInterface {
 
     @GET("/api/v1/auth/profile")
     suspend fun profile(): Response<ProfileResponse>
+
+    @Multipart
+    @PUT("/api/v1/auth/edit-password")
+    suspend fun passwordEdit(
+        @Part("old_password") oldPassword: RequestBody,
+        @Part("new_password") newPassword: RequestBody,
+    ): Response<BaseResponse>
 
 //
 //    @GET("/v1/stories")

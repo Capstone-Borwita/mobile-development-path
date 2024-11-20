@@ -1,4 +1,4 @@
-package com.untillness.borwita.ui.wrapper.fragments.home
+package com.untillness.borwita.ui.profile_password
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -6,38 +6,32 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.untillness.borwita.R
-import com.untillness.borwita.data.remote.repositories.AuthRepository
 import com.untillness.borwita.data.remote.repositories.ProfileRepository
 import com.untillness.borwita.data.remote.repositories.SharePrefRepository
+import com.untillness.borwita.data.remote.requests.ProfilePasswordRequest
 import com.untillness.borwita.data.remote.responses.ErrorResponse
-import com.untillness.borwita.data.remote.responses.LoginResponse
-import com.untillness.borwita.data.remote.responses.ProfileResponse
 import com.untillness.borwita.data.states.ApiState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
-    context: Context,
-) : ViewModel() {
-    private val profileRepository: ProfileRepository = ProfileRepository()
+class ProfilePasswordViewModel(context: Context) : ViewModel() {
+    private var profileRepository: ProfileRepository = ProfileRepository()
 
     private var sharePrefRepository: SharePrefRepository = SharePrefRepository(
         context = context,
     )
     private var token: String = this.sharePrefRepository.getToken()
 
-    private val _profileState = MutableLiveData<ApiState<ProfileResponse>>(ApiState.Loading)
-    val profileState: LiveData<ApiState<ProfileResponse>> = _profileState
+    private val _passwordEditState = MutableLiveData<ApiState<Nothing?>>(ApiState.Standby)
+    val passwordEditState: LiveData<ApiState<Nothing?>> = _passwordEditState
 
-    fun removeToken() {
-        return sharePrefRepository.removeToken()
-    }
-
-    fun loadProfile(context: Context) {
+    fun doPasswordEdit(
+        context: Context, req: ProfilePasswordRequest
+    ) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
-            _profileState.postValue(
+            this._passwordEditState.postValue(
                 ApiState.Error(
                     message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
                 )
@@ -45,30 +39,28 @@ class HomeViewModel(
         }
 
         CoroutineScope(coroutineExceptionHandler).launch {
-            _profileState.postValue(ApiState.Loading)
+            _passwordEditState.postValue(ApiState.Loading)
 
             val response = async {
-                profileRepository.getProfile(token)
+                profileRepository.passwordEdit(token = token, req = req)
             }.await()
 
             if (!response.isSuccessful) {
                 val errorResponse: ErrorResponse = Gson().fromJson(
                     response.errorBody()!!.charStream(), ErrorResponse::class.java
                 )
-                _profileState.postValue(
+                _passwordEditState.postValue(
                     ApiState.Error(
-                        message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi),
+                        message = "Kata Sandi Lama yang kamu masukkan tidak sesuai, silahkan coba lagi.",
                     )
                 )
                 return@launch
             }
 
-            val profileResponse: ProfileResponse = response.body() ?: ProfileResponse()
-
-            _profileState.postValue(
-                ApiState.Success(
-                    data = profileResponse,
-                    message = "Berhasil"
+            _passwordEditState.postValue(
+                ApiState.Success<Nothing?>(
+                    message = "Berhasil mengubah kata sandi.",
+                    data = null,
                 )
             )
         }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.MainViewModel
 import com.untillness.borwita.ui.login.LoginViewModel
+import com.untillness.borwita.ui.profile_password.ProfilePasswordViewModel
 import com.untillness.borwita.ui.register.RegisterViewModel
 import com.untillness.borwita.ui.wrapper.fragments.home.HomeViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileViewModel
@@ -55,6 +56,9 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
         if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
             return ProfileViewModel(mApplication) as T
+        }
+        if (modelClass.isAssignableFrom(ProfilePasswordViewModel::class.java)) {
+            return ProfilePasswordViewModel(mApplication) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
