@@ -48,7 +48,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <Button
-                    android:id="@+id/outlinedButton"
+                    android:id="@+id/button_select_image"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"

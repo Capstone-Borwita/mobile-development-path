@@ -58,6 +58,9 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="false" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:theme="@style/Theme.Borwita.NoActionBar" />
     </application>
 
 </manifest>

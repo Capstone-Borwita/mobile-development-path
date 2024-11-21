@@ -43,26 +43,9 @@ interface ApiInterface {
         @Part("new_password") newPassword: RequestBody,
     ): Response<BaseResponse>
 
-//
-//    @GET("/v1/stories")
-//    suspend fun getAllStories(
-//        @Query("page") page: Int = 1,
-//        @Query("size") size: Int = 20,
-//    ): Response<StoryResponse>
-//
-//    @Multipart
-//    @POST("/v1/stories")
-//    suspend fun storeStory(
-//        @Part photo: MultipartBody.Part,
-//        @Part("description") description: RequestBody,
-//    ): Response<ErrorResponse>
-//
-//    @Multipart
-//    @POST("/v1/stories")
-//    suspend fun storeStory(
-//        @Part photo: MultipartBody.Part,
-//        @Part("description") description: RequestBody,
-//        @Part("lat") lat: RequestBody?,
-//        @Part("lon") lon: RequestBody?,
-//    ): Response<ErrorResponse>
+    @Multipart
+    @PUT("/api/v1/auth/edit-photo-profile")
+    suspend fun profileEditPhoto(
+        @Part avatar: MultipartBody.Part,
+    ): Response<BaseResponse>
 }

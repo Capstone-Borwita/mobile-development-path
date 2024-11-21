@@ -1,7 +1,12 @@
 package com.untillness.borwita.ui.profile_edit
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,10 +19,16 @@ import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.wrapper.WrapperViewModel
+import com.untillness.borwita.widgets.AppDialog
+import java.io.File
+import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.model.AspectRatio
 
 class ProfileEditActivity : Unfocus() {
     private lateinit var binding: ActivityProfileEditBinding
     private lateinit var wrapperViewModel: WrapperViewModel
+    private lateinit var profileEditViewModel: ProfileEditViewModel
+    private lateinit var appDialog: AppDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +37,7 @@ class ProfileEditActivity : Unfocus() {
         setContentView(this.binding.root)
 
         this.wrapperViewModel = ViewModelFactory.obtainViewModel<WrapperViewModel>(this)
+        this.profileEditViewModel = ViewModelFactory.obtainViewModel<ProfileEditViewModel>(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -34,6 +46,7 @@ class ProfileEditActivity : Unfocus() {
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        this.appDialog = AppDialog(this)
 
         title = "Ubah Profil"
 
@@ -50,7 +63,6 @@ class ProfileEditActivity : Unfocus() {
     }
 
     private fun initState() {
-        this.wrapperViewModel.initState(this)
     }
 
     private fun triggers() {
@@ -58,6 +70,9 @@ class ProfileEditActivity : Unfocus() {
             main.setOnRefreshListener {
                 this@ProfileEditActivity.wrapperViewModel.initState(this@ProfileEditActivity)
                 main.isRefreshing = false
+            }
+            buttonSelectImage.setOnClickListener {
+                launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
         }
     }
@@ -107,5 +122,66 @@ class ProfileEditActivity : Unfocus() {
                 }
             }
         }
+
+        this.profileEditViewModel.profileEditPhotoState.observe(this) {
+
+            when (it) {
+                ApiState.Loading -> {
+                    appDialog.showLoadingDialog()
+
+                }
+
+                ApiState.Standby -> {
+                    appDialog.hideLoadingDialog()
+
+                }
+
+                is ApiState.Error -> {
+                    appDialog.hideLoadingDialog()
+                    AppDialog.error(
+                        this@ProfileEditActivity, message = it.message
+                    )
+                }
+
+                is ApiState.Success -> {
+                    appDialog.hideLoadingDialog()
+                    this@ProfileEditActivity.wrapperViewModel.initState(this@ProfileEditActivity)
+
+                }
+            }
+        }
     }
+
+    private val launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+        val destinationUri = Uri.fromFile(File(cacheDir, "cropped"))
+
+        val options = UCrop.Options()
+        options.setAspectRatioOptions(
+            0, AspectRatio(
+                "Kotak",
+                1.toFloat(),
+                1.toFloat(),
+            )
+        )
+
+        UCrop.of(uri, destinationUri).withOptions(options).start(this)
+    }
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            val resultUri = UCrop.getOutput(data!!)
+
+            this@ProfileEditActivity.profileEditViewModel.profileEditPhoto(
+                context = this@ProfileEditActivity,
+                photo = resultUri ?: Uri.parse(""),
+            )
+        }
+    }
+
 }
