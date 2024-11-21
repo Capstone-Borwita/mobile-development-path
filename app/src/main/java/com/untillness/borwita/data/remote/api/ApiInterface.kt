@@ -48,4 +48,11 @@ interface ApiInterface {
     suspend fun profileEditPhoto(
         @Part avatar: MultipartBody.Part,
     ): Response<BaseResponse>
+
+    @Multipart
+    @PUT("/api/v1/auth/edit-profile")
+    suspend fun profileEdit(
+        @Part("email") email: RequestBody,
+        @Part("name") name: RequestBody,
+    ): Response<BaseResponse>
 }

@@ -11,8 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
+import com.untillness.borwita.data.remote.requests.ProfileEditRequest
 import com.untillness.borwita.data.states.ApiState
 import com.untillness.borwita.databinding.ActivityProfileEditBinding
 import com.untillness.borwita.helpers.AppHelpers
@@ -23,6 +26,7 @@ import com.untillness.borwita.widgets.AppDialog
 import java.io.File
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.model.AspectRatio
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class ProfileEditActivity : Unfocus() {
     private lateinit var binding: ActivityProfileEditBinding
@@ -74,10 +78,33 @@ class ProfileEditActivity : Unfocus() {
             buttonSelectImage.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
+
+            buttonSaveProfile.setOnClickListener {
+                doRegister()
+            }
         }
     }
 
     private fun listeners() {
+        binding.apply {
+            fieldName.editText?.doOnTextChanged { value, _, _, _ ->
+                val length: Int = value?.length ?: 0
+
+                if (length == 0) {
+                    fieldName.error = getString(R.string.nama_wajib_diisi)
+                    return@doOnTextChanged
+                }
+
+                if (length < 3) {
+                    fieldName.error = getString(R.string.panjang_nama_minimal_3_karakter)
+                    return@doOnTextChanged
+                } else {
+                    fieldName.isErrorEnabled = false
+                    fieldName.error = null
+                    return@doOnTextChanged
+                }
+            }
+        }
         this.wrapperViewModel.apply {
             profileState.observe(this@ProfileEditActivity) {
 
@@ -147,6 +174,8 @@ class ProfileEditActivity : Unfocus() {
                     appDialog.hideLoadingDialog()
                     this@ProfileEditActivity.wrapperViewModel.initState(this@ProfileEditActivity)
 
+                    AppDialog.success(this@ProfileEditActivity, message = it.message)
+
                 }
             }
         }
@@ -182,6 +211,48 @@ class ProfileEditActivity : Unfocus() {
                 photo = resultUri ?: Uri.parse(""),
             )
         }
+    }
+
+    private fun hasEmptyFields(): Boolean {
+        val fieldText: List<Int> = mutableListOf(
+            binding.fieldName.editText?.text?.length ?: 0,
+            binding.fieldEmail.editText?.text?.length ?: 0,
+        )
+
+        return fieldText.contains(0)
+    }
+
+    private fun hasErrorFields(): Boolean {
+        val errors: List<CharSequence> = mutableListOf(
+            binding.fieldName.error,
+            binding.fieldEmail.error,
+        ).filterNotNull()
+
+        return errors.isNotEmpty()
+    }
+
+    private fun doRegister() {
+        if (listOf(
+                hasEmptyFields(), hasErrorFields()
+            ).contains(true)
+        ) {
+            Snackbar.make(
+                this.binding.root,
+                this.getString(R.string.silahkan_mengisi_field_diatas_terlebih_dahulu),
+                Snackbar.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        val nameReqBody = binding.fieldName.editText?.text.toString().toRequestBody()
+        val emailReqBody = binding.fieldEmail.editText?.text.toString().toRequestBody()
+
+        this.profileEditViewModel.profileEdit(
+            context = this, profileEditRequest = ProfileEditRequest(
+                name = nameReqBody,
+                email = emailReqBody,
+            )
+        )
     }
 
 }
