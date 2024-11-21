@@ -171,21 +171,9 @@
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
                 android:layout_weight="1"
                 android:text="Kamera"
                 app:icon="@drawable/outline_camera_alt_24"
-                app:iconGravity="textStart" />
-
-            <Button
-                android:id="@+id/button_galeri_ktp"
-                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:text="Galeri"
-                app:icon="@drawable/outline_insert_photo_24"
                 app:iconGravity="textStart" />
         </LinearLayout>
 
@@ -332,22 +320,10 @@
             app:layout_constraintTop_toBottomOf="@+id/section_foto_toko">
 
             <Button
-                android:id="@+id/button_kamera_toko"
-                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:text="Kamera"
-                app:icon="@drawable/outline_camera_alt_24"
-                app:iconGravity="textStart" />
-
-            <Button
                 android:id="@+id/button_galeri_toko"
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
                 android:layout_weight="1"
                 android:text="Galeri"
                 app:icon="@drawable/outline_insert_photo_24"
