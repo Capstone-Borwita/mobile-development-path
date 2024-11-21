@@ -37,6 +37,9 @@ class ProfileEditViewModel(context: Context) : ViewModel() {
     private val _profileEditPhotoState = MutableLiveData<ApiState<BaseResponse?>>(ApiState.Standby)
     val profileEditPhotoState: LiveData<ApiState<BaseResponse?>> = _profileEditPhotoState
 
+    private val _isUpdated = MutableLiveData<Boolean>(false)
+    val isUpdated: LiveData<Boolean> = _isUpdated
+
     fun profileEditPhoto(context: Context, photo: Uri) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
             _profileEditPhotoState.postValue(
@@ -77,6 +80,8 @@ class ProfileEditViewModel(context: Context) : ViewModel() {
                 return@launch
             }
 
+            _isUpdated.postValue(true)
+
             _profileEditPhotoState.postValue(
                 ApiState.Success<BaseResponse?>(
                     message = "Berhasil mengubah foto profil.", data = null
@@ -116,6 +121,8 @@ class ProfileEditViewModel(context: Context) : ViewModel() {
                 )
                 return@launch
             }
+
+            _isUpdated.postValue(true)
 
             _profileEditPhotoState.postValue(
                 ApiState.Success(

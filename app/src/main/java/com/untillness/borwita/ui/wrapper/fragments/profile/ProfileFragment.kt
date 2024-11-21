@@ -1,5 +1,6 @@
 package com.untillness.borwita.ui.wrapper.fragments.profile
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -109,7 +111,7 @@ class ProfileFragment : Fragment() {
             }
             listUbahProfil.setOnClickListener {
                 val intent = Intent(this@ProfileFragment.context, ProfileEditActivity::class.java)
-                startActivity(intent)
+                resultLauncher.launch(intent)
             }
             listUbahKataSandi.setOnClickListener {
                 val intent =
@@ -142,6 +144,15 @@ class ProfileFragment : Fragment() {
                 }
 
             })
+    }
+
+    private val resultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            AppHelpers.log("DIUPDATE")
+            this@ProfileFragment.wrapperViewModel.initState(this@ProfileFragment.requireContext())
+        }
     }
 
 

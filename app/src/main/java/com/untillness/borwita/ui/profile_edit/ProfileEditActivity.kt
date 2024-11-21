@@ -3,11 +3,15 @@ package com.untillness.borwita.ui.profile_edit
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BuildCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -62,6 +66,9 @@ class ProfileEditActivity : Unfocus() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        if (this@ProfileEditActivity.profileEditViewModel.isUpdated.value == true) {
+            setResult(RESULT_OK)
+        }
         finish()
         return super.onSupportNavigateUp()
     }
@@ -83,6 +90,16 @@ class ProfileEditActivity : Unfocus() {
                 doRegister()
             }
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (this@ProfileEditActivity.profileEditViewModel.isUpdated.value == true) {
+                    setResult(RESULT_OK)
+                }
+                finish()
+            }
+        })
+
     }
 
     private fun listeners() {
