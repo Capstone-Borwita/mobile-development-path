@@ -13,6 +13,7 @@ import com.untillness.borwita.databinding.ActivityTokoStoreBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.ui.capture.CaptureActivity
+import com.untillness.borwita.ui.map.MapsActivity
 
 class TokoStoreActivity : Unfocus() {
     private lateinit var binding: ActivityTokoStoreBinding
@@ -45,6 +46,11 @@ class TokoStoreActivity : Unfocus() {
         this.binding.apply {
             buttonKameraKtp.setOnClickListener {
                 val intent = Intent(this@TokoStoreActivity, CaptureActivity::class.java)
+                startActivity(intent)
+            }
+
+            buttonMapToko.setOnClickListener {
+                val intent = Intent(this@TokoStoreActivity, MapsActivity::class.java)
                 startActivity(intent)
             }
         }
