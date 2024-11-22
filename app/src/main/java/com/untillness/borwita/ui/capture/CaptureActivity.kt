@@ -17,15 +17,23 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.untillness.borwita.R
 import com.untillness.borwita.databinding.ActivityCaptureBinding
+import com.untillness.borwita.helpers.AppHelpers
+import com.untillness.borwita.helpers.ImageClassifierHelper
+import com.untillness.borwita.helpers.ObjectDetectorHelper
+import org.tensorflow.lite.task.gms.vision.detector.Detection
+import org.tensorflow.lite.task.vision.classifier.Classifications
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -41,6 +49,9 @@ class CaptureActivity : AppCompatActivity() {
     private lateinit var viewFinderRect: Rect
 
     var animator: ObjectAnimator? = null
+
+    private lateinit var imageClassifierHelper: ObjectDetectorHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,7 +170,36 @@ class CaptureActivity : AppCompatActivity() {
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
+        imageClassifierHelper = ObjectDetectorHelper(
+            context = this,
+            detectorListener = object : ObjectDetectorHelper.DetectorListener {
+                override fun onError(error: String) {
+                    runOnUiThread {
+                        Toast.makeText(this@CaptureActivity, error, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onResults(results: MutableList<Detection>?, inferenceTime: Long, imageHeight: Int, imageWidth: Int) {
+                    runOnUiThread {
+                        results?.let { it ->
+                            AppHelpers.log(it.toString())
+                        }
+                    }
+                }
+            })
+
         cameraProviderFuture.addListener({
+            val resolutionSelector = ResolutionSelector.Builder()
+                .setAspectRatioStrategy(AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY)
+                .build()
+
+            val imageAnalyzer = ImageAnalysis.Builder().setResolutionSelector(resolutionSelector)
+                .setTargetRotation(binding.viewFinder.display.rotation)
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
+            imageAnalyzer.setAnalyzer(Executors.newSingleThreadExecutor()) { image ->
+                imageClassifierHelper.detectObject(image)
+            }
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
@@ -179,7 +219,7 @@ class CaptureActivity : AppCompatActivity() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture
+                    this, cameraSelector, preview, imageCapture, imageAnalyzer,
                 )
 
             } catch (exc: Exception) {
