@@ -1,9 +1,16 @@
 package com.untillness.borwita.ui.map
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -18,6 +25,7 @@ import com.untillness.borwita.data.states.ApiState
 import com.untillness.borwita.databinding.ActivityMapsBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
+import com.untillness.borwita.widgets.AppDialog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -27,6 +35,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var mapViewModel: MapViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +46,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.hide()
 
         this.mapViewModel = ViewModelFactory.obtainViewModel<MapViewModel>(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment =
@@ -44,6 +54,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         this.listeners()
+
+        this.triggers()
     }
 
     /**
@@ -58,13 +70,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
 
-        map.moveCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                this@MapsActivity.mapViewModel.currentLatLong.value ?: LatLng(
-                    0.toDouble(), 0.toDouble()
-                ), 18f
-            )
-        )
+
+        this.moveCameraMap()
 
         val oldPosition = map.cameraPosition.target
 
@@ -96,6 +103,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }.start()
             }
         }
+    }
+
+    private fun moveCameraMap(newPosition: LatLng? = null) {
+        map.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                newPosition ?: this@MapsActivity.mapViewModel.currentLatLong.value ?: LatLng(
+                    0.toDouble(), 0.toDouble()
+                ), 18f
+            )
+        )
     }
 
     private fun listeners() {
@@ -142,6 +159,71 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
 
+        }
+    }
+
+    private fun triggers() {
+        this.binding.apply {
+            bottomSheetMap.buttonGps.setOnClickListener {
+                this@MapsActivity.getMyLastLocation()
+            }
+        }
+    }
+
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this, permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun getMyLastLocation() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) && checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val newPosition = LatLng(
+                        location.latitude, location.longitude
+                    )
+                    this@MapsActivity.mapViewModel.setCurrentLatLong(
+                        newPosition
+                    )
+                    this@MapsActivity.moveCameraMap(newPosition)
+                } else {
+                    AppDialog.error(
+                        context = this@MapsActivity,
+                        message = "Lokasi tidak ditemukan, silahkan coba lagi.",
+                    )
+                }
+            }
+        } else {
+            requestPermissionLocationLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
+    private val requestPermissionLocationLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
+                // Precise location access granted.
+                getMyLastLocation()
+            }
+
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+                // Only approximate location access granted.
+                getMyLastLocation()
+            }
+
+            else -> {
+                AppDialog.error(
+                    context = this@MapsActivity,
+                    message = getString(R.string.izin_ke_lokasi_ditolak_fitur_tidak_bisa_digunakan),
+                )
+            }
         }
     }
 }
