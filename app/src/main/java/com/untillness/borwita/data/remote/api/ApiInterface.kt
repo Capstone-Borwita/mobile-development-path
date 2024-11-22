@@ -3,6 +3,7 @@ package com.untillness.borwita.data.remote.api
 import com.untillness.borwita.data.remote.requests.LoginRequest
 import com.untillness.borwita.data.remote.responses.BaseResponse
 import com.untillness.borwita.data.remote.responses.ErrorResponse
+import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.data.remote.responses.LoginResponse
 import com.untillness.borwita.data.remote.responses.ProfileResponse
 import com.untillness.borwita.data.remote.responses.RegisterResponse
@@ -55,4 +56,13 @@ interface ApiInterface {
         @Part("email") email: RequestBody,
         @Part("name") name: RequestBody,
     ): Response<BaseResponse>
+
+
+    @GET("/reverse")
+    suspend fun georeverse(
+        @Query("format") format: String = "json",
+        @Query("addressdetails") addressdetails: String = "1",
+        @Query("lat") lat: String,
+        @Query("lon") lon: String,
+    ): Response<GeoreverseResponse>
 }
