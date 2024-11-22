@@ -10,6 +10,46 @@ import java.util.concurrent.TimeUnit
 
 class Api {
     companion object {
+        fun getApiService(baseUrl: String, token: String = ""): ApiInterface {
+            val loggingInterceptor =
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+            val authInterceptor = Interceptor { chain ->
+                val req = chain.request()
+                val requestHeaders =
+                    req
+                        .newBuilder()
+                        .addHeader("Authorization", "Bearer $token")
+                        .build()
+
+                chain.proceed(requestHeaders)
+            }
+
+            val client = OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(authInterceptor)
+                .addNetworkInterceptor { chain ->
+                    chain.proceed(
+                        chain.request()
+                            .newBuilder()
+                            .header("User-Agent", "COOL APP 9000")
+                            .build()
+                    )
+                }
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build()
+
+            val retrofit = Retrofit
+                .Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client).build()
+
+            return retrofit.create(ApiInterface::class.java)
+        }
+
         fun getApiService(token: String = ""): ApiInterface {
             val loggingInterceptor =
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
