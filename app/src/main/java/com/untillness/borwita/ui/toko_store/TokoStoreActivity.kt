@@ -1,14 +1,18 @@
 package com.untillness.borwita.ui.toko_store
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.untillness.borwita.R
+import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.databinding.ActivityTokoStoreBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
@@ -51,8 +55,24 @@ class TokoStoreActivity : Unfocus() {
 
             buttonMapToko.setOnClickListener {
                 val intent = Intent(this@TokoStoreActivity, MapsActivity::class.java)
-                startActivity(intent)
+                resultLauncher.launch(intent)
             }
+        }
+    }
+
+    private val resultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK && result.data != null) {
+            val resultMap = if (Build.VERSION.SDK_INT >= 33) {
+                result.data?.getParcelableExtra<GeoreverseResponse>(MapsActivity.RESULT, GeoreverseResponse::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                result.data?.getParcelableExtra<GeoreverseResponse>(MapsActivity.RESULT)
+            }
+
+            AppHelpers.log(resultMap.toString())
+
         }
     }
 }

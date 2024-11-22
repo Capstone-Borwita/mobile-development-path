@@ -26,6 +26,8 @@ class MapViewModel : ViewModel() {
     private val _currentLatLong: MutableLiveData<LatLng> = MutableLiveData(jakartaLatLng)
     val currentLatLong: LiveData<LatLng> = _currentLatLong
 
+    var displayMap = ""
+
     fun setLoadingState() {
         this@MapViewModel._mapApiState.postValue(ApiState.Loading)
     }
@@ -53,6 +55,7 @@ class MapViewModel : ViewModel() {
                 )
             }.await()
 
+            this@MapViewModel.displayMap = places.body()?.displayName ?: ""
             this@MapViewModel._mapApiState.postValue(
                 ApiState.Success(
                     message = "Berhasil", data = places.body() ?: GeoreverseResponse()

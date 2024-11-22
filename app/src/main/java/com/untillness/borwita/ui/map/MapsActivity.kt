@@ -1,6 +1,7 @@
 package com.untillness.borwita.ui.map
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.api.Api
+import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.data.states.ApiState
 import com.untillness.borwita.databinding.ActivityMapsBinding
 import com.untillness.borwita.helpers.AppHelpers
@@ -167,6 +169,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             bottomSheetMap.buttonGps.setOnClickListener {
                 this@MapsActivity.getMyLastLocation()
             }
+            bottomSheetMap.buttonSubmit.setOnClickListener {
+                val resultIntent = Intent()
+                resultIntent.putExtra(
+                    RESULT, GeoreverseResponse(
+                        displayName = this@MapsActivity.mapViewModel.displayMap,
+                        lat = this@MapsActivity.mapViewModel.currentLatLong.value?.latitude.toString(),
+                        lon = this@MapsActivity.mapViewModel.currentLatLong.value?.longitude.toString(),
+                    )
+                )
+                setResult(RESULT_OK, resultIntent)
+                finish()
+            }
         }
     }
 
@@ -225,5 +239,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
             }
         }
+    }
+
+
+    companion object {
+        const val RESULT = "RESULT_MAP"
     }
 }
