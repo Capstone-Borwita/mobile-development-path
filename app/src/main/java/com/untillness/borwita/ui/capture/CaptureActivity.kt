@@ -5,11 +5,14 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Size
 import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -24,8 +27,14 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.untillness.borwita.MainActivity
 import com.untillness.borwita.R
 import com.untillness.borwita.databinding.ActivityCaptureBinding
+import com.untillness.borwita.helpers.AppHelpers
+import com.untillness.borwita.helpers.ExifHelper
+import com.untillness.borwita.helpers.FileHelper
+import com.untillness.borwita.helpers.ImageHelper
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -41,6 +50,7 @@ class CaptureActivity : AppCompatActivity() {
     private lateinit var viewFinderRect: Rect
 
     var animator: ObjectAnimator? = null
+    private lateinit var outputDirectory: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +69,8 @@ class CaptureActivity : AppCompatActivity() {
         title = "Ambil Foto KTP"
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+        outputDirectory = FileHelper.getOutputDirectory(this)
+
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -152,6 +164,27 @@ class CaptureActivity : AppCompatActivity() {
                     val msg = "Photo capture succeeded: ${output.savedUri}"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+
+                    val uri = output.savedUri!!
+
+
+                    //get saved file as bitmap
+                    val bitmap: Bitmap = ImageDecoder.decodeBitmap(
+                        ImageDecoder.createSource(
+                            this@CaptureActivity.contentResolver, uri
+                        )
+                    )
+
+                    val photoFile = ImageHelper.createFile(outputDirectory, FILENAME_FORMAT, PHOTO_EXTENSION)
+                    val cropped = ImageHelper.cropImage(
+                        ExifHelper.rotateBitmap(uri.path!!, bitmap),
+                        Size(binding.viewFinder.width, binding.viewFinder.height),
+                        viewFinderRect
+                    )
+                    val newUri = ImageHelper.storeImage(cropped, photoFile)
+
+                    AppHelpers.log(newUri.toString())
+
                 }
             })
     }
@@ -218,6 +251,7 @@ class CaptureActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "Borwita"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val PHOTO_EXTENSION = ".jpg"
         private val REQUIRED_PERMISSIONS = mutableListOf(
             Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO
         ).apply {
