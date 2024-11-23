@@ -2,13 +2,12 @@ package com.untillness.borwita.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.requests.LoginRequest
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityLoginBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
@@ -46,22 +45,22 @@ class LoginActivity : Unfocus() {
         this.loginViewModel.apply {
             this.loginState.observe(this@LoginActivity) {
                 when (it) {
-                    ApiState.Loading -> {
+                    AppState.Loading -> {
                         appDialog.showLoadingDialog()
                     }
 
-                    ApiState.Standby -> {
+                    AppState.Standby -> {
                         appDialog.hideLoadingDialog()
                     }
 
-                    is ApiState.Error -> {
+                    is AppState.Error -> {
                         appDialog.hideLoadingDialog()
                         AppDialog.error(
                             this@LoginActivity, message = it.message
                         )
                     }
 
-                    is ApiState.Success<*> -> {
+                    is AppState.Success<*> -> {
                         appDialog.hideLoadingDialog()
                         AppDialog.success(
                             this@LoginActivity,

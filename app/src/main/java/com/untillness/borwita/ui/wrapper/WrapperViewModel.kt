@@ -10,7 +10,7 @@ import com.untillness.borwita.data.remote.repositories.ProfileRepository
 import com.untillness.borwita.data.remote.repositories.SharePrefRepository
 import com.untillness.borwita.data.remote.responses.ErrorResponse
 import com.untillness.borwita.data.remote.responses.ProfileResponse
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -26,8 +26,8 @@ class WrapperViewModel(
     )
     private var token: String = this.sharePrefRepository.getToken()
 
-    private val _profileState = MutableLiveData<ApiState<ProfileResponse>>(ApiState.Loading)
-    val profileState: LiveData<ApiState<ProfileResponse>> = _profileState
+    private val _profileState = MutableLiveData<AppState<ProfileResponse>>(AppState.Loading)
+    val profileState: LiveData<AppState<ProfileResponse>> = _profileState
 
     init {
         this.initState(context)
@@ -40,14 +40,14 @@ class WrapperViewModel(
     private fun loadProfile(context: Context) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
             _profileState.postValue(
-                ApiState.Error(
+                AppState.Error(
                     message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
                 )
             )
         }
 
         CoroutineScope(coroutineExceptionHandler).launch {
-            _profileState.postValue(ApiState.Loading)
+            _profileState.postValue(AppState.Loading)
 
             val response = async {
                 profileRepository.getProfile(token)
@@ -58,7 +58,7 @@ class WrapperViewModel(
                     response.errorBody()!!.charStream(), ErrorResponse::class.java
                 )
                 _profileState.postValue(
-                    ApiState.Error(
+                    AppState.Error(
                         message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi),
                     )
                 )
@@ -68,7 +68,7 @@ class WrapperViewModel(
             val profileResponse: ProfileResponse = response.body() ?: ProfileResponse()
 
             _profileState.postValue(
-                ApiState.Success(
+                AppState.Success(
                     data = profileResponse, message = "Berhasil"
                 )
             )

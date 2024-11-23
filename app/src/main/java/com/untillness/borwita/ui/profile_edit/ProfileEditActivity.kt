@@ -3,15 +3,10 @@ package com.untillness.borwita.ui.profile_edit
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.BuildCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -20,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.requests.ProfileEditRequest
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityProfileEditBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
@@ -126,28 +121,28 @@ class ProfileEditActivity : Unfocus() {
             profileState.observe(this@ProfileEditActivity) {
 
                 when (it) {
-                    ApiState.Loading -> {
+                    AppState.Loading -> {
                         this@ProfileEditActivity.binding.apply {
                             mainSection.isVisible = false
                             loading.isVisible = true
                         }
                     }
 
-                    ApiState.Standby -> {
+                    AppState.Standby -> {
                         this@ProfileEditActivity.binding.apply {
                             mainSection.isVisible = false
                             loading.isVisible = false
                         }
                     }
 
-                    is ApiState.Error -> {
+                    is AppState.Error -> {
                         this@ProfileEditActivity.binding.apply {
                             mainSection.isVisible = false
                             loading.isVisible = false
                         }
                     }
 
-                    is ApiState.Success -> {
+                    is AppState.Success -> {
                         this@ProfileEditActivity.binding.apply {
                             mainSection.isVisible = true
                             loading.isVisible = false
@@ -170,24 +165,24 @@ class ProfileEditActivity : Unfocus() {
         this.profileEditViewModel.profileEditPhotoState.observe(this) {
 
             when (it) {
-                ApiState.Loading -> {
+                AppState.Loading -> {
                     appDialog.showLoadingDialog()
 
                 }
 
-                ApiState.Standby -> {
+                AppState.Standby -> {
                     appDialog.hideLoadingDialog()
 
                 }
 
-                is ApiState.Error -> {
+                is AppState.Error -> {
                     appDialog.hideLoadingDialog()
                     AppDialog.error(
                         this@ProfileEditActivity, message = it.message
                     )
                 }
 
-                is ApiState.Success -> {
+                is AppState.Success -> {
                     appDialog.hideLoadingDialog()
                     this@ProfileEditActivity.wrapperViewModel.initState(this@ProfileEditActivity)
 

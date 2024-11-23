@@ -10,7 +10,7 @@ import com.untillness.borwita.data.remote.repositories.ProfileRepository
 import com.untillness.borwita.data.remote.repositories.SharePrefRepository
 import com.untillness.borwita.data.remote.requests.ProfilePasswordRequest
 import com.untillness.borwita.data.remote.responses.ErrorResponse
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -24,22 +24,22 @@ class ProfilePasswordViewModel(context: Context) : ViewModel() {
     )
     private var token: String = this.sharePrefRepository.getToken()
 
-    private val _passwordEditState = MutableLiveData<ApiState<Nothing?>>(ApiState.Standby)
-    val passwordEditState: LiveData<ApiState<Nothing?>> = _passwordEditState
+    private val _passwordEditState = MutableLiveData<AppState<Nothing?>>(AppState.Standby)
+    val passwordEditState: LiveData<AppState<Nothing?>> = _passwordEditState
 
     fun doPasswordEdit(
         context: Context, req: ProfilePasswordRequest
     ) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
             this._passwordEditState.postValue(
-                ApiState.Error(
+                AppState.Error(
                     message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
                 )
             )
         }
 
         CoroutineScope(coroutineExceptionHandler).launch {
-            _passwordEditState.postValue(ApiState.Loading)
+            _passwordEditState.postValue(AppState.Loading)
 
             val response = async {
                 profileRepository.passwordEdit(token = token, req = req)
@@ -50,7 +50,7 @@ class ProfilePasswordViewModel(context: Context) : ViewModel() {
                     response.errorBody()!!.charStream(), ErrorResponse::class.java
                 )
                 _passwordEditState.postValue(
-                    ApiState.Error(
+                    AppState.Error(
                         message = "Kata Sandi Lama yang kamu masukkan tidak sesuai, silahkan coba lagi.",
                     )
                 )
@@ -58,7 +58,7 @@ class ProfilePasswordViewModel(context: Context) : ViewModel() {
             }
 
             _passwordEditState.postValue(
-                ApiState.Success<Nothing?>(
+                AppState.Success<Nothing?>(
                     message = "Berhasil mengubah kata sandi.",
                     data = null,
                 )

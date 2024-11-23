@@ -1,26 +1,23 @@
 package com.untillness.borwita.ui.map
 
 import android.content.Context
-import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.LatLng
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.api.Api
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
-import com.untillness.borwita.data.states.ApiState
-import com.untillness.borwita.helpers.AppHelpers
+import com.untillness.borwita.data.states.AppState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class MapViewModel : ViewModel() {
-    private val _mapApiState: MutableLiveData<ApiState<GeoreverseResponse>> =
-        MutableLiveData(ApiState.Standby)
-    val mapApiState: LiveData<ApiState<GeoreverseResponse>> = _mapApiState
+    private val _mapAppState: MutableLiveData<AppState<GeoreverseResponse>> =
+        MutableLiveData(AppState.Standby)
+    val mapAppState: LiveData<AppState<GeoreverseResponse>> = _mapAppState
 
     private val jakartaLatLng = LatLng(-6.1758237, 106.8262149)
     private val _currentLatLong: MutableLiveData<LatLng> = MutableLiveData(jakartaLatLng)
@@ -29,7 +26,7 @@ class MapViewModel : ViewModel() {
     var displayMap = ""
 
     fun setLoadingState() {
-        this@MapViewModel._mapApiState.postValue(ApiState.Loading)
+        this@MapViewModel._mapAppState.postValue(AppState.Loading)
     }
 
     fun setCurrentLatLong(value: LatLng) {
@@ -38,8 +35,8 @@ class MapViewModel : ViewModel() {
 
     fun getGeoreverse(context: Context) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
-            _mapApiState.postValue(
-                ApiState.Error(
+            _mapAppState.postValue(
+                AppState.Error(
                     message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
                 )
             )
@@ -56,8 +53,8 @@ class MapViewModel : ViewModel() {
             }.await()
 
             this@MapViewModel.displayMap = places.body()?.displayName ?: ""
-            this@MapViewModel._mapApiState.postValue(
-                ApiState.Success(
+            this@MapViewModel._mapAppState.postValue(
+                AppState.Success(
                     message = "Berhasil", data = places.body() ?: GeoreverseResponse()
                 )
             )

@@ -12,7 +12,7 @@ import com.untillness.borwita.data.remote.repositories.SharePrefRepository
 import com.untillness.borwita.data.remote.requests.LoginRequest
 import com.untillness.borwita.data.remote.responses.ErrorResponse
 import com.untillness.borwita.data.remote.responses.LoginResponse
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -22,8 +22,8 @@ class LoginViewModel(application: Application) : ViewModel() {
     private val authRepository: AuthRepository = AuthRepository()
     private val sharePrefRepository: SharePrefRepository = SharePrefRepository(application)
 
-    private val _loginState = MutableLiveData<ApiState<LoginResponse>>(ApiState.Standby)
-    val loginState: LiveData<ApiState<LoginResponse>> = _loginState
+    private val _loginState = MutableLiveData<AppState<LoginResponse>>(AppState.Standby)
+    val loginState: LiveData<AppState<LoginResponse>> = _loginState
 
     private fun storeToken(token: String) {
         sharePrefRepository.setToken(
@@ -40,14 +40,14 @@ class LoginViewModel(application: Application) : ViewModel() {
     fun doLogin(context: Context, request: LoginRequest) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
             _loginState.postValue(
-                ApiState.Error(
+                AppState.Error(
                     message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
                 )
             )
         }
 
         CoroutineScope(coroutineExceptionHandler).launch {
-            _loginState.postValue(ApiState.Loading)
+            _loginState.postValue(AppState.Loading)
 
             val response = async {
                 authRepository.login(request)
@@ -58,7 +58,7 @@ class LoginViewModel(application: Application) : ViewModel() {
                     response.errorBody()!!.charStream(), ErrorResponse::class.java
                 )
                 _loginState.postValue(
-                    ApiState.Error(
+                    AppState.Error(
                         message = "Email atau Kata Sandi yang kamu masukkan salah, silakan coba lagi.",
                     )
                 )
@@ -72,7 +72,7 @@ class LoginViewModel(application: Application) : ViewModel() {
             )
 
             _loginState.postValue(
-                ApiState.Success(
+                AppState.Success(
                     data = loginResponse,
                     message = "Berhasil Login"
                 )

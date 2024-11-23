@@ -9,7 +9,7 @@ import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.repositories.AuthRepository
 import com.untillness.borwita.data.remote.responses.ErrorResponse
 import com.untillness.borwita.data.remote.responses.RegisterResponse
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -19,8 +19,8 @@ import okhttp3.RequestBody
 class RegisterViewModel : ViewModel() {
     private var authRepository: AuthRepository = AuthRepository()
 
-    private val _registerState = MutableLiveData<ApiState<RegisterResponse>>(ApiState.Standby)
-    val registerState: LiveData<ApiState<RegisterResponse>> = _registerState
+    private val _registerState = MutableLiveData<AppState<RegisterResponse>>(AppState.Standby)
+    val registerState: LiveData<AppState<RegisterResponse>> = _registerState
 
     fun doRegister(
         context: Context,
@@ -30,14 +30,14 @@ class RegisterViewModel : ViewModel() {
     ) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
             this._registerState.postValue(
-                ApiState.Error(
+                AppState.Error(
                     message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
                 )
             )
         }
 
         CoroutineScope(coroutineExceptionHandler).launch {
-            _registerState.postValue(ApiState.Loading)
+            _registerState.postValue(AppState.Loading)
 
             val response = async {
                 authRepository.register(
@@ -52,7 +52,7 @@ class RegisterViewModel : ViewModel() {
                     response.errorBody()!!.charStream(), ErrorResponse::class.java
                 )
                 _registerState.postValue(
-                    ApiState.Error(
+                    AppState.Error(
                         message = "Ada kesalahan, silahkan coba lagi beberapa saat lagi.",
                     )
                 )
@@ -61,7 +61,7 @@ class RegisterViewModel : ViewModel() {
             val registerResponse: RegisterResponse = response.body() ?: RegisterResponse()
 
             _registerState.postValue(
-                ApiState.Success<RegisterResponse>(
+                AppState.Success<RegisterResponse>(
                     message = "Berhasil",
                     data = registerResponse,
                 )

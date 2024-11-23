@@ -9,28 +9,20 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.untillness.borwita.R
-import com.untillness.borwita.data.remote.api.Api
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityMapsBinding
-import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.widgets.AppDialog
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -119,9 +111,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun listeners() {
         this.mapViewModel.apply {
-            mapApiState.observe(this@MapsActivity) {
+            mapAppState.observe(this@MapsActivity) {
                 when (it) {
-                    is ApiState.Error, ApiState.Standby -> {
+                    is AppState.Error, AppState.Standby -> {
                         this@MapsActivity.binding.apply {
                             bottomSheetMap.apply {
                                 textPlaceholder.isVisible = true
@@ -133,7 +125,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                     }
 
-                    ApiState.Loading -> {
+                    AppState.Loading -> {
                         this@MapsActivity.binding.apply {
                             bottomSheetMap.apply {
                                 textPlaceholder.isVisible = false
@@ -145,7 +137,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                     }
 
-                    is ApiState.Success -> {
+                    is AppState.Success -> {
                         this@MapsActivity.binding.apply {
                             bottomSheetMap.apply {
                                 textPlaceholder.isVisible = false
