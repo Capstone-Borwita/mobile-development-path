@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.databinding.ActivityTokoStoreBinding
@@ -19,8 +22,9 @@ import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.ui.capture.CaptureActivity
 import com.untillness.borwita.ui.map.MapsActivity
 
-class TokoStoreActivity : Unfocus() {
+class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
     private lateinit var binding: ActivityTokoStoreBinding
+    private lateinit var map: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,12 @@ class TokoStoreActivity : Unfocus() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
         title = "Tambah Toko"
+
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         this.triggers()
     }
@@ -74,5 +84,9 @@ class TokoStoreActivity : Unfocus() {
             AppHelpers.log(resultMap.toString())
 
         }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
     }
 }
