@@ -34,6 +34,7 @@ import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ExifHelper
 import com.untillness.borwita.helpers.FileHelper
 import com.untillness.borwita.helpers.ImageHelper
+import com.untillness.borwita.helpers.ViewModelFactory
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -52,6 +53,8 @@ class CaptureActivity : AppCompatActivity() {
     var animator: ObjectAnimator? = null
     private lateinit var outputDirectory: File
 
+    private lateinit var captureViewModel: CaptureViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,6 +66,8 @@ class CaptureActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        this.captureViewModel = ViewModelFactory.obtainViewModel<CaptureViewModel>(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 

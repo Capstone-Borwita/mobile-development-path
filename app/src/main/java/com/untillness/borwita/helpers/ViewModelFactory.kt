@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.MainViewModel
+import com.untillness.borwita.ui.capture.CaptureViewModel
 import com.untillness.borwita.ui.login.LoginViewModel
 import com.untillness.borwita.ui.map.MapViewModel
 import com.untillness.borwita.ui.profile_edit.ProfileEditViewModel
@@ -37,7 +38,7 @@ class ViewModelFactory private constructor(private val mApplication: Application
             val factory = getInstance(activity.application)
             return ViewModelProvider(activity, factory)[T::class.java]
         }
-        inline fun <reified T : ViewModel> fromFragment(activity: FragmentActivity): T {
+        inline fun <reified T : ViewModel> obtainViewModel(activity: FragmentActivity): T {
             val factory = getInstance(activity.application)
             return ViewModelProvider(activity, factory)[T::class.java]
         }
@@ -71,6 +72,9 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
         if (modelClass.isAssignableFrom(MapViewModel::class.java)) {
             return MapViewModel() as T
+        }
+        if (modelClass.isAssignableFrom(CaptureViewModel::class.java)) {
+            return CaptureViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
