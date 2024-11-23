@@ -88,5 +88,6 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.uiSettings.setAllGesturesEnabled(false)
     }
 }
