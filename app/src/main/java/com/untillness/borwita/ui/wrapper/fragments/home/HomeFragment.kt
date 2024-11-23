@@ -30,8 +30,8 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        this.wrapperViewModel = ViewModelFactory.fromFragment<WrapperViewModel>(this.requireActivity())
-        this.homeViewModel = ViewModelFactory.fromFragment<HomeViewModel>(this.requireActivity())
+        this.wrapperViewModel = ViewModelFactory.obtainViewModel<WrapperViewModel>(this.requireActivity())
+        this.homeViewModel = ViewModelFactory.obtainViewModel<HomeViewModel>(this.requireActivity())
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root

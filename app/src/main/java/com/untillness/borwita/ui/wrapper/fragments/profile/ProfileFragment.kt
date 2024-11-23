@@ -37,9 +37,9 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         this.profileViewModel =
-            ViewModelFactory.fromFragment<ProfileViewModel>(this.requireActivity())
+            ViewModelFactory.obtainViewModel<ProfileViewModel>(this.requireActivity())
         this.wrapperViewModel =
-            ViewModelFactory.fromFragment<WrapperViewModel>(this.requireActivity())
+            ViewModelFactory.obtainViewModel<WrapperViewModel>(this.requireActivity())
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
