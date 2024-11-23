@@ -174,17 +174,18 @@ class CaptureActivity : AppCompatActivity() {
             context = this,
             detectorListener = object : ObjectDetectorHelper.DetectorListener {
                 override fun onError(error: String) {
+                    AppHelpers.log(error)
                     runOnUiThread {
                         Toast.makeText(this@CaptureActivity, error, Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onResults(results: MutableList<Detection>?, inferenceTime: Long, imageHeight: Int, imageWidth: Int) {
-                    runOnUiThread {
-                        results?.let { it ->
-                            AppHelpers.log(it.toString())
-                        }
-                    }
+                    AppHelpers.log(results.toString())
+//                    runOnUiThread {
+//                        results?.let { it ->
+//                        }
+//                    }
                 }
             })
 
