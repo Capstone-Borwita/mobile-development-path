@@ -27,8 +27,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import com.untillness.borwita.MainActivity
 import com.untillness.borwita.R
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityCaptureBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ExifHelper
@@ -85,6 +87,8 @@ class CaptureActivity : AppCompatActivity() {
 
         this.triggers()
 
+        this.listeners()
+
         this.cropRectanglePreview()
 
         this.animateScanEffect()
@@ -122,9 +126,38 @@ class CaptureActivity : AppCompatActivity() {
         })
     }
 
+    private fun listeners() {
+        this.captureViewModel.apply {
+            captureState.observe(this@CaptureActivity) {
+                when (it) {
+                    AppState.Standby -> {
+                        this@CaptureActivity.binding.iconCamera.isVisible = true
+                        this@CaptureActivity.binding.loading.isVisible = false
+                    }
+
+                    AppState.Loading -> {
+                        this@CaptureActivity.binding.iconCamera.isVisible = false
+                        this@CaptureActivity.binding.loading.isVisible = true
+                    }
+
+                    is AppState.Error -> TODO()
+                    is AppState.Success -> {
+                        this@CaptureActivity.binding.iconCamera.isVisible = true
+                        this@CaptureActivity.binding.loading.isVisible = false
+                    }
+                }
+            }
+        }
+    }
+
     private fun triggers() {
         // Set up the listeners for take photo and video capture buttons
-        binding.imageCaptureButton.setOnClickListener { takePhoto() }
+        binding.imageCaptureButton.setOnClickListener {
+            this@CaptureActivity.captureViewModel.assignCaptureState(
+                AppState.Loading
+            )
+            takePhoto()
+        }
     }
 
     private fun cropRectanglePreview() {
@@ -172,24 +205,16 @@ class CaptureActivity : AppCompatActivity() {
 
                     val uri = output.savedUri!!
 
-
-                    //get saved file as bitmap
-                    val bitmap: Bitmap = ImageDecoder.decodeBitmap(
-                        ImageDecoder.createSource(
-                            this@CaptureActivity.contentResolver, uri
-                        )
+                    this@CaptureActivity.captureViewModel.captureAndCrop(
+                        context = this@CaptureActivity,
+                        contentResolver = this@CaptureActivity.contentResolver,
+                        uri = uri,
+                        outputDirectory = outputDirectory,
+                        photoExtension = PHOTO_EXTENSION,
+                        fileNameFormat = FILENAME_FORMAT,
+                        viewFinder = binding.viewFinder,
+                        viewFinderRect = viewFinderRect,
                     )
-
-                    val photoFile = ImageHelper.createFile(outputDirectory, FILENAME_FORMAT, PHOTO_EXTENSION)
-                    val cropped = ImageHelper.cropImage(
-                        ExifHelper.rotateBitmap(uri.path!!, bitmap),
-                        Size(binding.viewFinder.width, binding.viewFinder.height),
-                        viewFinderRect
-                    )
-                    val newUri = ImageHelper.storeImage(cropped, photoFile)
-
-                    AppHelpers.log(newUri.toString())
-
                 }
             })
     }
