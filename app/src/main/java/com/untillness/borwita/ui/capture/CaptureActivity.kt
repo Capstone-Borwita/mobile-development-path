@@ -16,6 +16,8 @@ import android.util.Size
 import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +30,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.untillness.borwita.MainActivity
 import com.untillness.borwita.R
 import com.untillness.borwita.data.states.AppState
@@ -37,6 +41,7 @@ import com.untillness.borwita.helpers.ExifHelper
 import com.untillness.borwita.helpers.FileHelper
 import com.untillness.borwita.helpers.ImageHelper
 import com.untillness.borwita.helpers.ViewModelFactory
+import com.untillness.borwita.widgets.AppDialog
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -56,6 +61,14 @@ class CaptureActivity : AppCompatActivity() {
     private lateinit var outputDirectory: File
 
     private lateinit var captureViewModel: CaptureViewModel
+
+    private lateinit var cameraProvider: ProcessCameraProvider
+
+    // Preview
+    private lateinit var preview: Preview
+
+    // Select back camera as a default
+    private val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +90,10 @@ class CaptureActivity : AppCompatActivity() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         outputDirectory = FileHelper.getOutputDirectory(this)
+
+        preview = Preview.Builder().build().also {
+            it.surfaceProvider = binding.viewFinder.surfaceProvider
+        }
 
         // Request camera permissions
         if (allPermissionsGranted()) {
@@ -140,10 +157,57 @@ class CaptureActivity : AppCompatActivity() {
                         this@CaptureActivity.binding.loading.isVisible = true
                     }
 
-                    is AppState.Error -> TODO()
-                    is AppState.Success -> {
+                    is AppState.Error -> {
+                        this@CaptureActivity.stopCamera()
+
                         this@CaptureActivity.binding.iconCamera.isVisible = true
                         this@CaptureActivity.binding.loading.isVisible = false
+
+                        AppDialog.error(
+                            context = this@CaptureActivity,
+                            message = this@CaptureActivity.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
+                        )
+                    }
+
+                    is AppState.Success -> {
+                        this@CaptureActivity.stopCamera()
+
+                        this@CaptureActivity.binding.iconCamera.isVisible = true
+                        this@CaptureActivity.binding.loading.isVisible = false
+
+                        val dialog = BottomSheetDialog(this@CaptureActivity)
+
+                        // on below line we are inflating a layout file which we have created.
+                        val view = layoutInflater.inflate(R.layout.bottom_sheet_capture, null)
+
+                        val imageResult = view.findViewById<ImageView>(R.id.image_result)
+                        Glide.with(this@CaptureActivity).load(it.data.path)
+                            .placeholder(AppHelpers.circularProgressDrawable(this@CaptureActivity))
+                            .centerCrop().into(imageResult)
+
+                        // on below line we are creating a variable for our button
+                        // which we are using to dismiss our dialog.
+                        val btnClose = view.findViewById<Button>(R.id.button_cancel)
+
+                        // on below line we are adding on click listener
+                        // for our dismissing the dialog button.
+                        btnClose.setOnClickListener {
+                            // on below line we are calling a dismiss
+                            // method to close our dialog.
+                            dialog.dismiss()
+                            this@CaptureActivity.resumeCamera()
+                        }
+                        // below line is use to set cancelable to avoid
+                        // closing of dialog box when clicking on the screen.
+                        dialog.setCancelable(false)
+
+                        // on below line we are setting
+                        // content view to our view.
+                        dialog.setContentView(view)
+
+                        // on below line we are calling
+                        // a show method to display a dialog.
+                        dialog.show()
                     }
                 }
             }
@@ -153,9 +217,6 @@ class CaptureActivity : AppCompatActivity() {
     private fun triggers() {
         // Set up the listeners for take photo and video capture buttons
         binding.imageCaptureButton.setOnClickListener {
-            this@CaptureActivity.captureViewModel.assignCaptureState(
-                AppState.Loading
-            )
             takePhoto()
         }
     }
@@ -175,6 +236,10 @@ class CaptureActivity : AppCompatActivity() {
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
+
+        this@CaptureActivity.captureViewModel.assignCaptureState(
+            AppState.Loading
+        )
 
         // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())
@@ -220,26 +285,14 @@ class CaptureActivity : AppCompatActivity() {
 
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-            // Preview
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
-            }
+            cameraProvider = cameraProviderFuture.get()
 
             imageCapture = ImageCapture.Builder().build()
 
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
             try {
-                // Unbind use cases before rebinding
-                cameraProvider.unbindAll()
+                this.stopCamera()
 
-                // Bind use cases to camera
-                cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture
-                )
+                this.resumeCamera()
 
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
@@ -272,6 +325,23 @@ class CaptureActivity : AppCompatActivity() {
         } else {
             startCamera()
         }
+    }
+
+    private fun stopCamera() {
+        // Unbind use cases before rebinding
+        cameraProvider.unbindAll()
+
+        animator?.pause()
+    }
+
+    private fun resumeCamera() {
+
+        // Bind use cases to camera
+        cameraProvider.bindToLifecycle(
+            this, cameraSelector, preview, imageCapture
+        )
+
+        animator?.start()
     }
 
     companion object {

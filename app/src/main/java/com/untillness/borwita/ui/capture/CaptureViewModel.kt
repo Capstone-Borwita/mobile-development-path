@@ -63,8 +63,6 @@ class CaptureViewModel : ViewModel() {
             )
             val newUri = ImageHelper.storeImage(cropped, photoFile)
 
-            AppHelpers.log(newUri.toString())
-
             this@CaptureViewModel._captureState.postValue(
                 AppState.Success<Uri>(
                     message = "Berhasil",
