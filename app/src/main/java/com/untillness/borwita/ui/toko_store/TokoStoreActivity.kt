@@ -2,10 +2,12 @@ package com.untillness.borwita.ui.toko_store
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -73,6 +75,11 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                 resultLauncher.launch(intent)
             }
 
+
+            buttonGaleriToko.setOnClickListener {
+                launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
             buttonMapToko.setOnClickListener {
                 val intent = Intent(this@TokoStoreActivity, MapsActivity::class.java)
                 resultLauncher.launch(intent)
@@ -90,6 +97,16 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
                     textPlaceholderImageKtp.isVisible = false
                     imageKtp.isVisible = true
+                }
+            }
+            selectedToko.observe(this@TokoStoreActivity) {
+                this@TokoStoreActivity.binding.apply {
+                    Glide.with(this@TokoStoreActivity).load(it)
+                        .placeholder(AppHelpers.circularProgressDrawable(this@TokoStoreActivity))
+                        .centerCrop().into(imageToko)
+
+                    textPlaceholderImageToko.isVisible = false
+                    imageToko.isVisible = true
                 }
             }
         }
@@ -129,6 +146,15 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
             }
         }
     }
+
+    private val launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+
+        this.tokoStoreViewModel.assignSelectedToko(uri)
+    }
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
