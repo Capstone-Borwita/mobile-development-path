@@ -7,6 +7,10 @@ import okhttp3.RequestBody
 import retrofit2.http.Part
 
 class TokoRepository {
+    suspend fun list(
+        token: String,
+    ) = Api.getApiService(token).listToko()
+
     suspend fun ocr(
         token: String,
         photo: MultipartBody.Part,

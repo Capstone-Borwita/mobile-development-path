@@ -8,6 +8,7 @@ import com.untillness.borwita.data.remote.responses.LoginResponse
 import com.untillness.borwita.data.remote.responses.OcrResponse
 import com.untillness.borwita.data.remote.responses.ProfileResponse
 import com.untillness.borwita.data.remote.responses.RegisterResponse
+import com.untillness.borwita.data.remote.responses.TokoResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -88,4 +89,7 @@ interface ApiInterface {
         @Part("ktp_photo_identifier") ktp: RequestBody,
         @Part storePhoto: MultipartBody.Part,
     ): Response<BaseResponse>
+
+    @GET("/api/v1/stores/")
+    suspend fun listToko(): Response<TokoResponse>
 }
