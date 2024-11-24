@@ -146,7 +146,7 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                 )
                 map.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
-                        newPosition, 18f
+                        newPosition, 14f
                     )
                 )
             }

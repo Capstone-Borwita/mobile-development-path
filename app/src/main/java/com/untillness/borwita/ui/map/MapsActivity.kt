@@ -104,7 +104,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             CameraUpdateFactory.newLatLngZoom(
                 newPosition ?: this@MapsActivity.mapViewModel.currentLatLong.value ?: LatLng(
                     0.toDouble(), 0.toDouble()
-                ), 18f
+                ), 14f
             )
         )
     }
