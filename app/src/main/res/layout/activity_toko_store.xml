@@ -367,6 +367,15 @@
         </com.google.android.material.card.MaterialCardView>
 
 
+        <TextView
+            android:id="@+id/text_placeholder_alamat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/silahkan_pilih_gambar"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:textAlignment="textStart" />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/section_map"
             style="?attr/materialCardViewFilledStyle"

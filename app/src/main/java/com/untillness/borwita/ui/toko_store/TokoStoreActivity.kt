@@ -56,6 +56,7 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         title = "Tambah Toko"
 
         this.binding.sectionMap.isVisible = false
+        this.binding.textPlaceholderAlamat.isVisible = false
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment =
@@ -119,8 +120,12 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
             selectedMap.observe(this@TokoStoreActivity) {
                 this@TokoStoreActivity.binding.apply {
                     sectionMap.isVisible = true
+                    textPlaceholderAlamat.isVisible = true
                     sectionAlamat.isVisible = false
+
+                    textPlaceholderAlamat.text = it.displayName ?: "-"
                 }
+
                 val newPosition: LatLng =
                     LatLng(it.lat?.toDouble() ?: 0.toDouble(), it.lon?.toDouble() ?: 0.toDouble())
 
