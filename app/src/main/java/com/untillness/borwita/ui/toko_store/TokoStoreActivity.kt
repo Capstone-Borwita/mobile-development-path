@@ -16,9 +16,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.responses.DataOcr
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
@@ -52,6 +55,7 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
         title = "Tambah Toko"
 
+        this.binding.sectionMap.isVisible = false
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment =
@@ -74,7 +78,6 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                 val intent = Intent(this@TokoStoreActivity, CaptureActivity::class.java)
                 resultLauncher.launch(intent)
             }
-
 
             buttonGaleriToko.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -109,12 +112,35 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                     imageToko.isVisible = true
                 }
             }
+            selectedMap.observe(this@TokoStoreActivity) {
+                this@TokoStoreActivity.binding.apply {
+                    sectionMap.isVisible = true
+                    sectionAlamat.isVisible = false
+                }
+                val newPosition: LatLng =
+                    LatLng(it.lat?.toDouble() ?: 0.toDouble(), it.lon?.toDouble() ?: 0.toDouble())
+
+                map.clear()
+                map.addMarker(
+                    MarkerOptions()
+                        .position(newPosition)
+                        .title(it.displayName)
+                )
+                map.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        newPosition, 18f
+                    )
+                )
+            }
         }
     }
 
     private val resultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        // | ================================================================================================================
+        // | FROM
+        // | Map Activity
         if (result.resultCode == MapsActivity.RESULT_MAP_CODE && result.data != null) {
             AppHelpers.log(result.data.toString())
 
@@ -126,6 +152,10 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                 @Suppress("DEPRECATION") result.data?.getParcelableExtra<GeoreverseResponse>(
                     MapsActivity.RESULT_MAP_EXTRA
                 )
+            }
+
+            if (data != null) {
+                this.tokoStoreViewModel.assignSelectedMap(data)
             }
         }
 

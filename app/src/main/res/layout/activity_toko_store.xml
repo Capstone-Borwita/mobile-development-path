@@ -355,14 +355,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_label_alamat">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
                 <TextView
                     android:id="@+id/text_placeholder_image_alamat"
                     android:layout_width="match_parent"
@@ -370,16 +362,6 @@
                     android:gravity="center"
                     android:text="Pilih Alamat"
                     android:textAlignment="center" />
-
-                <ImageView
-                    android:id="@+id/image_alamat"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/deskripsi"
-                    android:src="@drawable/ic_launcher_background"
-                    android:transitionName="image_story" />
-            </LinearLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
 
