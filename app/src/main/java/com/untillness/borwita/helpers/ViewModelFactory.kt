@@ -74,7 +74,7 @@ class ViewModelFactory private constructor(private val mApplication: Application
             return MapViewModel() as T
         }
         if (modelClass.isAssignableFrom(CaptureViewModel::class.java)) {
-            return CaptureViewModel() as T
+            return CaptureViewModel(mApplication) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

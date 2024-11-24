@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -34,6 +35,9 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.untillness.borwita.MainActivity
 import com.untillness.borwita.R
+import com.untillness.borwita.data.remote.responses.DataOcr
+import com.untillness.borwita.data.remote.responses.GeoreverseResponse
+import com.untillness.borwita.data.remote.responses.OcrResponse
 import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityCaptureBinding
 import com.untillness.borwita.helpers.AppHelpers
@@ -41,6 +45,7 @@ import com.untillness.borwita.helpers.ExifHelper
 import com.untillness.borwita.helpers.FileHelper
 import com.untillness.borwita.helpers.ImageHelper
 import com.untillness.borwita.helpers.ViewModelFactory
+import com.untillness.borwita.ui.map.MapsActivity.Companion.RESULT
 import com.untillness.borwita.widgets.AppDialog
 import java.io.File
 import java.text.SimpleDateFormat
@@ -70,6 +75,8 @@ class CaptureActivity : AppCompatActivity() {
     // Select back camera as a default
     private val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
+    private lateinit var appDialog: AppDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -83,6 +90,7 @@ class CaptureActivity : AppCompatActivity() {
         }
 
         this.captureViewModel = ViewModelFactory.obtainViewModel<CaptureViewModel>(this)
+        appDialog = AppDialog(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
@@ -188,6 +196,7 @@ class CaptureActivity : AppCompatActivity() {
                         // on below line we are creating a variable for our button
                         // which we are using to dismiss our dialog.
                         val btnClose = view.findViewById<Button>(R.id.button_cancel)
+                        val btnSubmit = view.findViewById<Button>(R.id.button_submit)
 
                         // on below line we are adding on click listener
                         // for our dismissing the dialog button.
@@ -196,6 +205,9 @@ class CaptureActivity : AppCompatActivity() {
                             // method to close our dialog.
                             dialog.dismiss()
                             this@CaptureActivity.resumeCamera()
+                        }
+                        btnSubmit.setOnClickListener {
+                            this@CaptureActivity.captureViewModel.doOcr(this@CaptureActivity)
                         }
                         // below line is use to set cancelable to avoid
                         // closing of dialog box when clicking on the screen.
@@ -208,6 +220,35 @@ class CaptureActivity : AppCompatActivity() {
                         // on below line we are calling
                         // a show method to display a dialog.
                         dialog.show()
+                    }
+                }
+            }
+
+            ocrState.observe(this@CaptureActivity) {
+                when (it) {
+                    AppState.Loading -> {
+                        appDialog.showLoadingDialog()
+                    }
+
+                    AppState.Standby -> {
+                        appDialog.hideLoadingDialog()
+                    }
+
+                    is AppState.Error -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.error(
+                            context = this@CaptureActivity,
+                            message = this@CaptureActivity.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi),
+                        )
+                    }
+
+                    is AppState.Success -> {
+                        val resultIntent = Intent()
+                        resultIntent.putExtra(
+                            RESULT, it.data,
+                        )
+                        setResult(RESULT_OK, resultIntent)
+                        finish()
                     }
                 }
             }
@@ -353,5 +394,8 @@ class CaptureActivity : AppCompatActivity() {
         ).apply {
 //            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }.toTypedArray()
+
+
+        const val RESULT = "RESULT_OCR"
     }
 }
