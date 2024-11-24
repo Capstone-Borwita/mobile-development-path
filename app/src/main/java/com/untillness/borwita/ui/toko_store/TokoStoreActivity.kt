@@ -142,8 +142,6 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         // | FROM
         // | Map Activity
         if (result.resultCode == MapsActivity.RESULT_MAP_CODE && result.data != null) {
-            AppHelpers.log(result.data.toString())
-
             val data = if (Build.VERSION.SDK_INT >= 33) {
                 result.data?.getParcelableExtra<GeoreverseResponse>(
                     MapsActivity.RESULT_MAP_EXTRA, GeoreverseResponse::class.java
