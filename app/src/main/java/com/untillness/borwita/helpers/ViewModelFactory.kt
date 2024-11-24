@@ -16,6 +16,7 @@ import com.untillness.borwita.ui.toko_store.TokoStoreViewModel
 import com.untillness.borwita.ui.wrapper.WrapperViewModel
 import com.untillness.borwita.ui.wrapper.fragments.home.HomeViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileViewModel
+import com.untillness.borwita.ui.wrapper.fragments.toko.TokoViewModel
 
 class ViewModelFactory private constructor(private val mApplication: Application) :
     ViewModelProvider.NewInstanceFactory() {
@@ -79,6 +80,9 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
         if (modelClass.isAssignableFrom(TokoStoreViewModel::class.java)) {
             return TokoStoreViewModel(mApplication) as T
+        }
+        if (modelClass.isAssignableFrom(TokoViewModel::class.java)) {
+            return TokoViewModel(mApplication) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

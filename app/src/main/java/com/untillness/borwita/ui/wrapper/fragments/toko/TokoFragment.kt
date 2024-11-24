@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.FragmentTokoBinding
+import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.about.AboutActivity
 import com.untillness.borwita.ui.toko_detail.TokoDetailActivity
 import com.untillness.borwita.ui.toko_store.TokoStoreActivity
@@ -21,18 +24,19 @@ class TokoFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var tokoViewModel: TokoViewModel
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val tokoViewModel =
-            ViewModelProvider(this).get(TokoViewModel::class.java)
+        this.tokoViewModel = ViewModelFactory.obtainViewModel<TokoViewModel>(this@TokoFragment.requireActivity())
 
         _binding = FragmentTokoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         this.triggers()
+
+        this.listeners()
 
         return root
     }
@@ -49,8 +53,50 @@ class TokoFragment : Fragment() {
                 startActivity(intent)
             }
             emptyData.emptyDataButton.setOnClickListener {
-                val intent = Intent(this@TokoFragment.context, TokoDetailActivity::class.java)
-                startActivity(intent)
+                this@TokoFragment.tokoViewModel.refreshIndicator(this@TokoFragment.requireContext())
+            }
+            pullToRefresh.setOnRefreshListener {
+                this@TokoFragment.tokoViewModel.refreshIndicator(this@TokoFragment.requireContext())
+                pullToRefresh.isRefreshing = false
+            }
+        }
+    }
+
+    private fun listeners() {
+        this@TokoFragment.tokoViewModel.apply {
+            dataToko.observe(viewLifecycleOwner) {
+                when (it) {
+                    AppState.Standby, AppState.Loading -> {
+                        this@TokoFragment.binding.apply {
+                            shimmer.isVisible = true
+                            emptyData.emptyData.isVisible = false
+                            rvToko.isVisible = false
+                        }
+                    }
+
+                    is AppState.Error -> {
+                        this@TokoFragment.binding.apply {
+                            shimmer.isVisible = false
+                            emptyData.emptyData.isVisible = true
+                            rvToko.isVisible = false
+                            emptyData.emptyDataText.text = it.message
+                        }
+                    }
+
+                    is AppState.Success -> {
+                        this@TokoFragment.binding.apply {
+                            shimmer.isVisible = false
+                            emptyData.emptyData.isVisible = false
+                            rvToko.isVisible = true
+
+                            TokoAdapter.setUpRecyclerView(
+                                context = this@TokoFragment.requireContext(),
+                                recyclerView = rvToko,
+                                data = it.data
+                            )
+                        }
+                    }
+                }
             }
         }
     }
