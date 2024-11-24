@@ -22,10 +22,12 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.responses.DataOcr
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.databinding.ActivityTokoStoreBinding
+import com.untillness.borwita.extensions.isEmpty
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
@@ -87,6 +89,9 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
             buttonMapToko.setOnClickListener {
                 val intent = Intent(this@TokoStoreActivity, MapsActivity::class.java)
                 resultLauncher.launch(intent)
+            }
+            buttonStore.setOnClickListener {
+                doStoreToko()
             }
         }
     }
@@ -190,6 +195,66 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         this.tokoStoreViewModel.assignSelectedToko(uri)
     }
 
+    private fun doStoreToko() {
+        binding.fieldStore.error =
+            if (binding.fieldStore.isEmpty()) "Nama Toko wajib diisi" else null
+
+        binding.fieldName.error =
+            if (binding.fieldName.isEmpty()) "Nama Pemilik Toko wajib diisi" else null
+
+        binding.fieldPhone.error =
+            if (binding.fieldPhone.isEmpty()) "Nomor Telepon wajib diisi" else null
+
+        binding.fieldNomorNik.error =
+            if (binding.fieldNomorNik.isEmpty()) "Nomor NIK wajib diisi" else null
+
+        binding.fieldNameKtp.error =
+            if (binding.fieldNameKtp.isEmpty()) "Nama Sesuai KTP wajib diisi" else null
+
+        binding.fieldAlamatKtp.error =
+            if (binding.fieldAlamatKtp.isEmpty()) "Alamat Sesuai KTP wajib diisi" else null
+
+        if (hasErrorFields()) {
+            Snackbar.make(
+                this.binding.root,
+                getString(R.string.silahkan_mengisi_field_diatas_terlebih_dahulu),
+                Snackbar.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        if (this.tokoStoreViewModel.selectedToko.value == null) {
+            Snackbar.make(
+                this.binding.root,
+                "Foto Toko wajib diisi.",
+                Snackbar.LENGTH_SHORT
+            ).show()
+            return
+        }
+        if (this.tokoStoreViewModel.selectedMap.value == null) {
+            Snackbar.make(
+                this.binding.root,
+                "Alamat Toko wajib diisi.",
+                Snackbar.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        AppHelpers.log("Pass")
+    }
+
+    private fun hasErrorFields(): Boolean {
+        val errors: List<CharSequence> = mutableListOf(
+            binding.fieldStore.error,
+            binding.fieldName.error,
+            binding.fieldPhone.error,
+            binding.fieldNomorNik.error,
+            binding.fieldNameKtp.error,
+            binding.fieldAlamatKtp.error,
+        ).filterNotNull()
+
+        return errors.isNotEmpty()
+    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
