@@ -72,4 +72,20 @@ interface ApiInterface {
     suspend fun ocr(
         @Part ktp: MultipartBody.Part,
     ): Response<OcrResponse>
+
+    @Multipart
+    @POST("/api/v1/stores")
+    suspend fun storeToko(
+        @Part("name") name: RequestBody,
+        @Part("owner_name") ownerName: RequestBody,
+        @Part("keeper_phone_number") phone: RequestBody,
+        @Part("keeper_nik") keeperNik: RequestBody,
+        @Part("keeper_name") keeperName: RequestBody,
+        @Part("keeper_address") keeperAddress: RequestBody,
+        @Part("latitude") lat: RequestBody,
+        @Part("longitude") long: RequestBody,
+        @Part("georeverse") address: RequestBody,
+        @Part("ktp_photo_identifier") ktp: RequestBody,
+        @Part storePhoto: MultipartBody.Part,
+    ): Response<BaseResponse>
 }

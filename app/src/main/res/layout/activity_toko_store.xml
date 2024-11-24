@@ -188,11 +188,11 @@
             android:hint="Nomor NIK*"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:enabled="false"
             app:layout_constraintTop_toBottomOf="@+id/section_button_ktp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_nomor_nik"
+                android:inputType="phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

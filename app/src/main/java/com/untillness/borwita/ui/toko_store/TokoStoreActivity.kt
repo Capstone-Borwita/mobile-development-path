@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.responses.DataOcr
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityTokoStoreBinding
 import com.untillness.borwita.extensions.isEmpty
 import com.untillness.borwita.helpers.AppHelpers
@@ -33,12 +34,14 @@ import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.capture.CaptureActivity
 import com.untillness.borwita.ui.map.MapsActivity
+import com.untillness.borwita.widgets.AppDialog
 import java.io.File
 
 class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
     private lateinit var binding: ActivityTokoStoreBinding
     private lateinit var map: GoogleMap
     private lateinit var tokoStoreViewModel: TokoStoreViewModel
+    private lateinit var appDialog: AppDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +57,7 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         this.tokoStoreViewModel = ViewModelFactory.obtainViewModel<TokoStoreViewModel>(this)
+        this.appDialog = AppDialog(this)
 
         title = "Tambah Toko"
 
@@ -144,6 +148,42 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                     )
                 )
             }
+
+            storeTokoState.observe(this@TokoStoreActivity) {
+                when (it) {
+                    AppState.Loading -> {
+                        appDialog.showLoadingDialog()
+                    }
+
+                    AppState.Standby -> {
+                        appDialog.hideLoadingDialog()
+                    }
+
+                    is AppState.Error -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.error(
+                            this@TokoStoreActivity, message = it.message
+                        )
+                    }
+
+                    is AppState.Success<*> -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.success(
+                            this@TokoStoreActivity,
+                            message = "Berhasil menambah data toko.",
+                            callback = object : AppDialog.Companion.AppDialogCallback {
+
+                                override fun onDismiss() {
+                                    finish()
+                                }
+
+                                override fun onConfirm() {
+                                }
+                            },
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -225,22 +265,26 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
         if (this.tokoStoreViewModel.selectedToko.value == null) {
             Snackbar.make(
-                this.binding.root,
-                "Foto Toko wajib diisi.",
-                Snackbar.LENGTH_SHORT
+                this.binding.root, "Foto Toko wajib diisi.", Snackbar.LENGTH_SHORT
             ).show()
             return
         }
         if (this.tokoStoreViewModel.selectedMap.value == null) {
             Snackbar.make(
-                this.binding.root,
-                "Alamat Toko wajib diisi.",
-                Snackbar.LENGTH_SHORT
+                this.binding.root, "Alamat Toko wajib diisi.", Snackbar.LENGTH_SHORT
             ).show()
             return
         }
 
-        AppHelpers.log("Pass")
+        this@TokoStoreActivity.tokoStoreViewModel.store(
+            context = this,
+            name = binding.fieldStore.editText?.text.toString(),
+            ownerName = binding.fieldName.editText?.text.toString(),
+            phone = binding.fieldPhone.editText?.text.toString(),
+            keeperName = binding.fieldNameKtp.editText?.text.toString(),
+            keeperAddress = binding.fieldAlamatKtp.editText?.text.toString(),
+            nik = binding.fieldNomorNik.editText?.text.toString(),
+        )
     }
 
     private fun hasErrorFields(): Boolean {
