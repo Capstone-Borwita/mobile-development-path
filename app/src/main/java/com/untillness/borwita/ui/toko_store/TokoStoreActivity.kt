@@ -131,9 +131,7 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
                 map.clear()
                 map.addMarker(
-                    MarkerOptions()
-                        .position(newPosition)
-                        .title(it.displayName)
+                    MarkerOptions().position(newPosition).title(it.displayName)
                 )
                 map.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
