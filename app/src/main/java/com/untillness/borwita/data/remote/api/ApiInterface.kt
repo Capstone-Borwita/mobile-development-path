@@ -5,6 +5,7 @@ import com.untillness.borwita.data.remote.responses.BaseResponse
 import com.untillness.borwita.data.remote.responses.ErrorResponse
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.data.remote.responses.LoginResponse
+import com.untillness.borwita.data.remote.responses.OcrResponse
 import com.untillness.borwita.data.remote.responses.ProfileResponse
 import com.untillness.borwita.data.remote.responses.RegisterResponse
 import okhttp3.MultipartBody
@@ -65,4 +66,10 @@ interface ApiInterface {
         @Query("lat") lat: String,
         @Query("lon") lon: String,
     ): Response<GeoreverseResponse>
+
+    @Multipart
+    @POST("/api/v1/ocr/ktp")
+    suspend fun ocr(
+        @Part ktp: MultipartBody.Part,
+    ): Response<OcrResponse>
 }
