@@ -7,6 +7,11 @@ import okhttp3.RequestBody
 import retrofit2.http.Part
 
 class TokoRepository {
+    suspend fun detail(
+        token: String,
+        id: String,
+    ) = Api.getApiService(token).detailToko(id)
+
     suspend fun list(
         token: String,
     ) = Api.getApiService(token).listToko()

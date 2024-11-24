@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.untillness.borwita.data.remote.responses.DataToko
 import com.untillness.borwita.databinding.ItemTokoBinding
 import com.untillness.borwita.helpers.AppHelpers
+import com.untillness.borwita.ui.toko_detail.TokoDetailActivity
 
 
 class TokoAdapter : ListAdapter<DataToko, TokoAdapter.ThisHolder>(DIFF_CALLBACK) {
@@ -56,16 +57,10 @@ class TokoAdapter : ListAdapter<DataToko, TokoAdapter.ThisHolder>(DIFF_CALLBACK)
         }
 
         fun onClickItem(item: DataToko) {
-//            val intent = Intent(binding.root.context, StoryActivity::class.java)
-//            intent.putExtra(StoryActivity.EXTRA_STORY, item)
-//
-//            val optionsCompat: ActivityOptionsCompat =
-//                ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                    binding.root.context as Activity,
-//                    androidx.core.util.Pair(binding.imageStory, "image_story"),
-//                )
-//
-//            binding.root.context.startActivity(intent, optionsCompat.toBundle())
+            val intent = Intent(binding.root.context, TokoDetailActivity::class.java)
+            intent.putExtra(TokoDetailActivity.EXTRA_ID, item.id.toString())
+
+            binding.root.context.startActivity(intent)
         }
     }
 
