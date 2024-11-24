@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.untillness.borwita.MainActivity
 import com.untillness.borwita.R
+import com.untillness.borwita.data.remote.responses.Data
 import com.untillness.borwita.data.remote.responses.DataOcr
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.data.remote.responses.OcrResponse
@@ -45,7 +46,6 @@ import com.untillness.borwita.helpers.ExifHelper
 import com.untillness.borwita.helpers.FileHelper
 import com.untillness.borwita.helpers.ImageHelper
 import com.untillness.borwita.helpers.ViewModelFactory
-import com.untillness.borwita.ui.map.MapsActivity.Companion.RESULT
 import com.untillness.borwita.widgets.AppDialog
 import java.io.File
 import java.text.SimpleDateFormat
@@ -243,11 +243,14 @@ class CaptureActivity : AppCompatActivity() {
                     }
 
                     is AppState.Success -> {
+                        val dataOcr: DataOcr = it.data
+                        dataOcr.localPath = this@CaptureActivity.captureViewModel.capturedImage.path
+
                         val resultIntent = Intent()
                         resultIntent.putExtra(
-                            RESULT, it.data,
+                            RESULT_OCR_EXTRA, it.data,
                         )
-                        setResult(RESULT_OK, resultIntent)
+                        setResult(RESULT_OCR_CODE, resultIntent)
                         finish()
                     }
                 }
@@ -275,6 +278,7 @@ class CaptureActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
+        if (this@CaptureActivity.captureViewModel.captureState.value is AppState.Loading) return
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
 
@@ -396,6 +400,7 @@ class CaptureActivity : AppCompatActivity() {
         }.toTypedArray()
 
 
-        const val RESULT = "RESULT_OCR"
+        const val RESULT_OCR_EXTRA = "RESULT_OCR_EXTRA"
+        const val RESULT_OCR_CODE = 222
     }
 }

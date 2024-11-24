@@ -164,13 +164,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             bottomSheetMap.buttonSubmit.setOnClickListener {
                 val resultIntent = Intent()
                 resultIntent.putExtra(
-                    RESULT, GeoreverseResponse(
+                    RESULT_MAP_EXTRA, GeoreverseResponse(
                         displayName = this@MapsActivity.mapViewModel.displayMap,
                         lat = this@MapsActivity.mapViewModel.currentLatLong.value?.latitude.toString(),
                         lon = this@MapsActivity.mapViewModel.currentLatLong.value?.longitude.toString(),
                     )
                 )
-                setResult(RESULT_OK, resultIntent)
+                setResult(RESULT_MAP_CODE, resultIntent)
                 finish()
             }
         }
@@ -235,6 +235,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     companion object {
-        const val RESULT = "RESULT_MAP"
+        const val RESULT_MAP_EXTRA = "RESULT_MAP_EXTRA"
+        const val RESULT_MAP_CODE = 111
     }
 }

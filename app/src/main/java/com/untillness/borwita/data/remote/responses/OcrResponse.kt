@@ -30,5 +30,5 @@ data class DataOcr(
 	val name: String? = null,
 
 	@field:SerializedName("local_path")
-	val localPath: String? = null
+	var localPath: String? = null
 ) : Parcelable

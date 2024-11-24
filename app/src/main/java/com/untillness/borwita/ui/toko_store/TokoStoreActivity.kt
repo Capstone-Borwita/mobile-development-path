@@ -10,21 +10,28 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
+import androidx.lifecycle.ViewModel
+import com.bumptech.glide.Glide
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.untillness.borwita.R
+import com.untillness.borwita.data.remote.responses.DataOcr
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.databinding.ActivityTokoStoreBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
+import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.capture.CaptureActivity
 import com.untillness.borwita.ui.map.MapsActivity
+import java.io.File
 
 class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
     private lateinit var binding: ActivityTokoStoreBinding
     private lateinit var map: GoogleMap
+    private lateinit var tokoStoreViewModel: TokoStoreViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +46,7 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        this.tokoStoreViewModel = ViewModelFactory.obtainViewModel<TokoStoreViewModel>(this)
 
         title = "Tambah Toko"
 
@@ -49,6 +57,8 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         this.triggers()
+
+        this.listeners()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -56,11 +66,11 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         return super.onSupportNavigateUp()
     }
 
-    private fun triggers(){
+    private fun triggers() {
         this.binding.apply {
             buttonKameraKtp.setOnClickListener {
                 val intent = Intent(this@TokoStoreActivity, CaptureActivity::class.java)
-                startActivity(intent)
+                resultLauncher.launch(intent)
             }
 
             buttonMapToko.setOnClickListener {
@@ -70,19 +80,53 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         }
     }
 
+    private fun listeners() {
+        this.tokoStoreViewModel.apply {
+            selectedKtp.observe(this@TokoStoreActivity) {
+                this@TokoStoreActivity.binding.apply {
+                    Glide.with(this@TokoStoreActivity).load(it.localPath?.let { File(it).path })
+                        .placeholder(AppHelpers.circularProgressDrawable(this@TokoStoreActivity))
+                        .centerCrop().into(imageKtp)
+
+                    textPlaceholderImageKtp.isVisible = false
+                    imageKtp.isVisible = true
+                }
+            }
+        }
+    }
+
     private val resultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_OK && result.data != null) {
-            val resultMap = if (Build.VERSION.SDK_INT >= 33) {
-                result.data?.getParcelableExtra<GeoreverseResponse>(MapsActivity.RESULT, GeoreverseResponse::class.java)
+        if (result.resultCode == MapsActivity.RESULT_MAP_CODE && result.data != null) {
+            AppHelpers.log(result.data.toString())
+
+            val data = if (Build.VERSION.SDK_INT >= 33) {
+                result.data?.getParcelableExtra<GeoreverseResponse>(
+                    MapsActivity.RESULT_MAP_EXTRA, GeoreverseResponse::class.java
+                )
             } else {
-                @Suppress("DEPRECATION")
-                result.data?.getParcelableExtra<GeoreverseResponse>(MapsActivity.RESULT)
+                @Suppress("DEPRECATION") result.data?.getParcelableExtra<GeoreverseResponse>(
+                    MapsActivity.RESULT_MAP_EXTRA
+                )
+            }
+        }
+
+        // | ================================================================================================================
+        // | FROM
+        // | Capture Activity
+        if (result.resultCode == CaptureActivity.RESULT_OCR_CODE && result.data != null) {
+            val data = if (Build.VERSION.SDK_INT >= 33) {
+                result.data?.getParcelableExtra<DataOcr>(
+                    CaptureActivity.RESULT_OCR_EXTRA, DataOcr::class.java
+                )
+            } else {
+                @Suppress("DEPRECATION") result.data?.getParcelableExtra<DataOcr>(CaptureActivity.RESULT_OCR_EXTRA)
             }
 
-            AppHelpers.log(resultMap.toString())
-
+            if (data != null) {
+                this.tokoStoreViewModel.assignSelectedKtp(data)
+            }
         }
     }
 

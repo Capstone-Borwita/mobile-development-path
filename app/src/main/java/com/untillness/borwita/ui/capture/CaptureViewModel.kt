@@ -43,7 +43,7 @@ class CaptureViewModel(context: Context) : ViewModel() {
 
     private val _captureState: MutableLiveData<AppState<Uri>> = MutableLiveData(AppState.Standby)
     val captureState: LiveData<AppState<Uri>> = _captureState
-    private lateinit var capturedImage: Uri
+    lateinit var capturedImage: Uri
 
     private val _ocrState: MutableLiveData<AppState<DataOcr>> = MutableLiveData(AppState.Standby)
     val ocrState: LiveData<AppState<DataOcr>> = _ocrState

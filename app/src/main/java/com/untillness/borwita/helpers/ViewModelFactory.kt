@@ -12,6 +12,7 @@ import com.untillness.borwita.ui.map.MapViewModel
 import com.untillness.borwita.ui.profile_edit.ProfileEditViewModel
 import com.untillness.borwita.ui.profile_password.ProfilePasswordViewModel
 import com.untillness.borwita.ui.register.RegisterViewModel
+import com.untillness.borwita.ui.toko_store.TokoStoreViewModel
 import com.untillness.borwita.ui.wrapper.WrapperViewModel
 import com.untillness.borwita.ui.wrapper.fragments.home.HomeViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileViewModel
@@ -75,6 +76,9 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
         if (modelClass.isAssignableFrom(CaptureViewModel::class.java)) {
             return CaptureViewModel(mApplication) as T
+        }
+        if (modelClass.isAssignableFrom(TokoStoreViewModel::class.java)) {
+            return TokoStoreViewModel(mApplication) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
