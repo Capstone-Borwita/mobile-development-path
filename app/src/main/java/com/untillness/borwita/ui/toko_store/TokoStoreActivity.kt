@@ -100,6 +100,10 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
                     textPlaceholderImageKtp.isVisible = false
                     imageKtp.isVisible = true
+
+                    fieldNomorNik.editText?.setText(it.nik)
+                    fieldNameKtp.editText?.setText(it.name)
+                    fieldAlamatKtp.editText?.setText(it.address)
                 }
             }
             selectedToko.observe(this@TokoStoreActivity) {
