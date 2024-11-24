@@ -6,14 +6,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.untillness.borwita.R
 import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityTokoDetailBinding
+import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
 
-class TokoDetailActivity : AppCompatActivity() {
+class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityTokoDetailBinding
     private lateinit var tokoDetailViewModel: TokoDetailViewModel
+    private lateinit var map: GoogleMap
 
     private var id: String = ""
 
@@ -27,6 +36,11 @@ class TokoDetailActivity : AppCompatActivity() {
 
         this.id = intent.getStringExtra(EXTRA_ID) ?: ""
         this.tokoDetailViewModel.id = this.id
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(this.binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -46,6 +60,11 @@ class TokoDetailActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return super.onSupportNavigateUp()
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        map.uiSettings.setAllGesturesEnabled(false)
     }
 
     private fun listeners() {
@@ -77,6 +96,39 @@ class TokoDetailActivity : AppCompatActivity() {
                             sectionLoading.isVisible = false
                             sectionContent.isVisible = true
                             emptyData.emptyData.isVisible = false
+
+                            textValueName.text = it.data.name
+                            textValueNameOwner.text = it.data.ownerName
+                            textValueNomorTeleponOwner.text = it.data.keeperPhoneNumber
+                            Glide.with(this@TokoDetailActivity).load(it.data.ktpPhotoPath)
+                                .placeholder(AppHelpers.circularProgressDrawable(this@TokoDetailActivity))
+                                .centerCrop().into(imageKtp)
+
+                            textValueNik.text = it.data.keeperNik
+                            textValueNameKtp.text = it.data.keeperName
+                            textValueAlamatKtp.text = it.data.keeperAddress
+
+                            Glide.with(this@TokoDetailActivity).load(it.data.storePhotoPath)
+                                .placeholder(AppHelpers.circularProgressDrawable(this@TokoDetailActivity))
+                                .centerCrop().into(imageToko)
+
+                            textValueAlamat.text = it.data.georeverse
+
+
+                            val newPosition: LatLng = LatLng(
+                                it.data.latitude?.toDouble() ?: 0.toDouble(),
+                                it.data.longitude?.toDouble() ?: 0.toDouble()
+                            )
+
+                            map.clear()
+                            map.addMarker(
+                                MarkerOptions().position(newPosition)
+                            )
+                            map.animateCamera(
+                                CameraUpdateFactory.newLatLngZoom(
+                                    newPosition, 14f
+                                )
+                            )
                         }
                     }
                 }
