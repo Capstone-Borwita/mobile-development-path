@@ -34,6 +34,8 @@ import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.capture.CaptureActivity
 import com.untillness.borwita.ui.map.MapsActivity
+import com.untillness.borwita.ui.map.MapsActivity.Companion.RESULT_MAP_CODE
+import com.untillness.borwita.ui.map.MapsActivity.Companion.RESULT_MAP_EXTRA
 import com.untillness.borwita.widgets.AppDialog
 import java.io.File
 
@@ -174,6 +176,8 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                             callback = object : AppDialog.Companion.AppDialogCallback {
 
                                 override fun onDismiss() {
+                                    val resultIntent = Intent()
+                                    setResult(RESULT_OK, resultIntent)
                                     finish()
                                 }
 
