@@ -18,7 +18,8 @@ import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.ui.toko_detail.TokoDetailActivity
 
 
-class TokoAdapter : ListAdapter<DataToko, TokoAdapter.ThisHolder>(DIFF_CALLBACK) {
+class TokoAdapter(private val onClickItem: (DataToko) -> Unit) :
+    ListAdapter<DataToko, TokoAdapter.ThisHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
@@ -29,12 +30,12 @@ class TokoAdapter : ListAdapter<DataToko, TokoAdapter.ThisHolder>(DIFF_CALLBACK)
     }
 
     override fun onBindViewHolder(holder: TokoAdapter.ThisHolder, position: Int) {
-        val event = getItem(position)
+        val data = getItem(position)
 
-        holder.bind(event)
+        holder.bind(data)
 
         holder.itemView.setOnClickListener {
-            holder.onClickItem(event)
+            onClickItem.invoke(data)
         }
     }
 
@@ -55,13 +56,6 @@ class TokoAdapter : ListAdapter<DataToko, TokoAdapter.ThisHolder>(DIFF_CALLBACK)
                 textAddress.text = item.georeverse
             }
         }
-
-        fun onClickItem(item: DataToko) {
-            val intent = Intent(binding.root.context, TokoDetailActivity::class.java)
-            intent.putExtra(TokoDetailActivity.EXTRA_ID, item.id.toString())
-
-            binding.root.context.startActivity(intent)
-        }
     }
 
     companion object {
@@ -80,9 +74,14 @@ class TokoAdapter : ListAdapter<DataToko, TokoAdapter.ThisHolder>(DIFF_CALLBACK)
         }
 
         fun setUpRecyclerView(
-            context: Context, data: List<DataToko>, recyclerView: RecyclerView
+            context: Context,
+            data: List<DataToko>,
+            recyclerView: RecyclerView,
+            onClickItem: (DataToko) -> Unit
         ) {
-            val adapter = TokoAdapter()
+            val adapter = TokoAdapter() {
+                onClickItem.invoke(it)
+            }
             adapter.submitList(data)
 
             recyclerView.adapter = adapter

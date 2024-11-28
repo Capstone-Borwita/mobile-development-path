@@ -97,7 +97,13 @@ class TokoFragment : Fragment() {
                                 context = this@TokoFragment.requireContext(),
                                 recyclerView = rvToko,
                                 data = it.data
-                            )
+                            ) {
+                                val intent =
+                                    Intent(binding.root.context, TokoDetailActivity::class.java)
+                                intent.putExtra(TokoDetailActivity.EXTRA_ID, it.id.toString())
+
+                                this@TokoFragment.resultLauncher.launch(intent)
+                            }
                         }
                     }
                 }
