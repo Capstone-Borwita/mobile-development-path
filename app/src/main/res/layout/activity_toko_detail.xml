@@ -349,7 +349,7 @@
                 app:cardBackgroundColor="@color/md_theme_primaryFixed"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_label_alamat">
+                app:layout_constraintTop_toBottomOf="@+id/text_value_alamat">
 
                 <fragment
                     android:id="@+id/map_view"
