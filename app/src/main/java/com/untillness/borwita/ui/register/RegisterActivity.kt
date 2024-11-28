@@ -1,19 +1,16 @@
 package com.untillness.borwita.ui.register
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityRegisterBinding
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.widgets.AppDialog
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class RegisterActivity : Unfocus() {
@@ -66,22 +63,22 @@ class RegisterActivity : Unfocus() {
         this.registerViewModel.apply {
             registerState.observe(this@RegisterActivity) {
                 when (it) {
-                    ApiState.Loading -> {
+                    AppState.Loading -> {
                         appDialog.showLoadingDialog()
                     }
 
-                    ApiState.Standby -> {
+                    AppState.Standby -> {
                         appDialog.hideLoadingDialog()
                     }
 
-                    is ApiState.Error -> {
+                    is AppState.Error -> {
                         appDialog.hideLoadingDialog()
                         AppDialog.error(
                             this@RegisterActivity, message = it.message
                         )
                     }
 
-                    is ApiState.Success<*> -> {
+                    is AppState.Success<*> -> {
                         appDialog.hideLoadingDialog()
                         AppDialog.success(
                             this@RegisterActivity,

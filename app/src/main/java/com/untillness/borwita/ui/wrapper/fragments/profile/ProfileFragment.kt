@@ -7,15 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.untillness.borwita.R
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.FragmentProfileBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
@@ -40,9 +37,9 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         this.profileViewModel =
-            ViewModelFactory.fromFragment<ProfileViewModel>(this.requireActivity())
+            ViewModelFactory.obtainViewModel<ProfileViewModel>(this.requireActivity())
         this.wrapperViewModel =
-            ViewModelFactory.fromFragment<WrapperViewModel>(this.requireActivity())
+            ViewModelFactory.obtainViewModel<WrapperViewModel>(this.requireActivity())
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -64,28 +61,28 @@ class ProfileFragment : Fragment() {
             profileState.observe(viewLifecycleOwner) {
 
                 when (it) {
-                    ApiState.Loading -> {
+                    AppState.Loading -> {
                         this@ProfileFragment.binding.apply {
                             widgetProfileSection.main.isVisible = false
                             widgetProfileSectionShimmer.main.isVisible = true
                         }
                     }
 
-                    ApiState.Standby -> {
+                    AppState.Standby -> {
                         this@ProfileFragment.binding.apply {
                             widgetProfileSection.main.isVisible = false
                             widgetProfileSectionShimmer.main.isVisible = false
                         }
                     }
 
-                    is ApiState.Error -> {
+                    is AppState.Error -> {
                         this@ProfileFragment.binding.apply {
                             widgetProfileSection.main.isVisible = false
                             widgetProfileSectionShimmer.main.isVisible = false
                         }
                     }
 
-                    is ApiState.Success -> {
+                    is AppState.Success -> {
                         this@ProfileFragment.binding.apply {
                             widgetProfileSection.main.isVisible = true
                             widgetProfileSectionShimmer.main.isVisible = false

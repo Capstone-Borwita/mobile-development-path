@@ -6,14 +6,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.MainViewModel
+import com.untillness.borwita.ui.capture.CaptureViewModel
 import com.untillness.borwita.ui.login.LoginViewModel
 import com.untillness.borwita.ui.map.MapViewModel
 import com.untillness.borwita.ui.profile_edit.ProfileEditViewModel
 import com.untillness.borwita.ui.profile_password.ProfilePasswordViewModel
 import com.untillness.borwita.ui.register.RegisterViewModel
+import com.untillness.borwita.ui.toko_detail.TokoDetailViewModel
+import com.untillness.borwita.ui.toko_store.TokoStoreViewModel
 import com.untillness.borwita.ui.wrapper.WrapperViewModel
 import com.untillness.borwita.ui.wrapper.fragments.home.HomeViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileViewModel
+import com.untillness.borwita.ui.wrapper.fragments.toko.TokoViewModel
 
 class ViewModelFactory private constructor(private val mApplication: Application) :
     ViewModelProvider.NewInstanceFactory() {
@@ -37,7 +41,7 @@ class ViewModelFactory private constructor(private val mApplication: Application
             val factory = getInstance(activity.application)
             return ViewModelProvider(activity, factory)[T::class.java]
         }
-        inline fun <reified T : ViewModel> fromFragment(activity: FragmentActivity): T {
+        inline fun <reified T : ViewModel> obtainViewModel(activity: FragmentActivity): T {
             val factory = getInstance(activity.application)
             return ViewModelProvider(activity, factory)[T::class.java]
         }
@@ -71,6 +75,18 @@ class ViewModelFactory private constructor(private val mApplication: Application
         }
         if (modelClass.isAssignableFrom(MapViewModel::class.java)) {
             return MapViewModel() as T
+        }
+        if (modelClass.isAssignableFrom(CaptureViewModel::class.java)) {
+            return CaptureViewModel(mApplication) as T
+        }
+        if (modelClass.isAssignableFrom(TokoStoreViewModel::class.java)) {
+            return TokoStoreViewModel(mApplication) as T
+        }
+        if (modelClass.isAssignableFrom(TokoViewModel::class.java)) {
+            return TokoViewModel(mApplication) as T
+        }
+        if (modelClass.isAssignableFrom(TokoDetailViewModel::class.java)) {
+            return TokoDetailViewModel(mApplication) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.untillness.borwita.data.remote.requests.ProfilePasswordRequest
-import com.untillness.borwita.data.states.ApiState
+import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityProfilePasswordBinding
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
@@ -114,22 +114,22 @@ class ProfilePasswordActivity : Unfocus() {
         this.profilePasswordViewModel.apply {
             passwordEditState.observe(this@ProfilePasswordActivity) {
                 when (it) {
-                    ApiState.Loading -> {
+                    AppState.Loading -> {
                         appDialog.showLoadingDialog()
                     }
 
-                    ApiState.Standby -> {
+                    AppState.Standby -> {
                         appDialog.hideLoadingDialog()
                     }
 
-                    is ApiState.Error -> {
+                    is AppState.Error -> {
                         appDialog.hideLoadingDialog()
                         AppDialog.error(
                             this@ProfilePasswordActivity, message = it.message
                         )
                     }
 
-                    is ApiState.Success<*> -> {
+                    is AppState.Success<*> -> {
                         appDialog.hideLoadingDialog()
                         AppDialog.success(
                             this@ProfilePasswordActivity,

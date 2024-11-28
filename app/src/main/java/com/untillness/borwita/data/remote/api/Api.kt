@@ -32,7 +32,7 @@ class Api {
                     chain.proceed(
                         chain.request()
                             .newBuilder()
-                            .header("User-Agent", "COOL APP 9000")
+                            .header("User-Agent", "BORWITA")
                             .build()
                     )
                 }

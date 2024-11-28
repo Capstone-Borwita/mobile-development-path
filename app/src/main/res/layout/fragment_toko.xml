@@ -7,6 +7,76 @@
     android:paddingTop="28dp"
     tools:context=".ui.wrapper.fragments.toko.TokoFragment">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pull_to_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="200dp">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:paddingTop="70dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+
+                        <include layout="@layout/item_toko_shimmer" />
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <include
+                    android:id="@+id/empty_data"
+                    layout="@layout/widget_empty_data" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_toko"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -24,54 +94,6 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
-
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/pull_to_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="vertical"
-                android:paddingHorizontal="16dp">
-
-                <include layout="@layout/item_toko" />
-
-                <include layout="@layout/item_toko" />
-
-                <include layout="@layout/item_toko" />
-
-                <include
-                    android:id="@+id/empty_data"
-                    layout="@layout/widget_empty_data" />
-
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/progress_bar_up_finish"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    android:paddingVertical="100dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/finish_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-            </LinearLayout>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </androidx.core.widget.NestedScrollView>
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

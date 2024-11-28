@@ -8,10 +8,11 @@
     tools:context=".ui.toko_store.TokoStoreActivity"
     android:clipToPadding="false">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="32dp"
+        android:orientation="vertical"
         >
 
         <com.google.android.material.card.MaterialCardView
@@ -89,6 +90,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_phone"
+                android:inputType="phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -109,7 +111,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="16dp"
             android:text="Foto KTP"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +122,7 @@
             android:id="@+id/section_foto_ktp"
             style="?attr/materialCardViewFilledStyle"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="230dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             app:cardBackgroundColor="@color/md_theme_primaryFixed"
@@ -137,7 +138,7 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <TextView
-                    android:id="@+id/text_placeholder_image_story"
+                    android:id="@+id/text_placeholder_image_ktp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -145,7 +146,7 @@
                     android:textAlignment="center" />
 
                 <ImageView
-                    android:id="@+id/image_story"
+                    android:id="@+id/image_ktp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/deskripsi"
@@ -191,6 +192,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_nomor_nik"
+                android:inputType="phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -262,7 +264,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="16dp"
             android:text="Foto Toko"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -337,7 +338,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="16dp"
+            android:layout_marginTop="16dp"
             android:text="Alamat Toko"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -356,32 +357,46 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_label_alamat">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
                 <TextView
-                    android:id="@+id/text_placeholder_imagealamat"
+                    android:id="@+id/text_placeholder_image_alamat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Pilih Alamat"
                     android:textAlignment="center" />
+        </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:id="@+id/image_alamat"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/deskripsi"
-                    android:src="@drawable/ic_launcher_background"
-                    android:transitionName="image_story" />
-            </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_placeholder_alamat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/silahkan_pilih_gambar"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:textAlignment="textStart" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/section_map"
+            style="?attr/materialCardViewFilledStyle"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/md_theme_primaryFixed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_label_alamat">
+
+            <fragment
+                android:id="@+id/map_view"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </com.google.android.material.card.MaterialCardView>
+
+
 
         <LinearLayout
             android:id="@+id/section_button_alamat"
@@ -418,5 +433,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/section_button_alamat"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>
