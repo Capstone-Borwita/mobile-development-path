@@ -1,5 +1,7 @@
 package com.untillness.borwita.ui.toko_detail
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -19,11 +21,15 @@ import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.ActivityTokoDetailBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
+import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileFragment.Companion.doLogout
+import com.untillness.borwita.widgets.AppDialog
+
 
 class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityTokoDetailBinding
     private lateinit var tokoDetailViewModel: TokoDetailViewModel
     private lateinit var map: GoogleMap
+    private lateinit var appDialog: AppDialog
 
     private var id: String = ""
 
@@ -37,6 +43,7 @@ class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
         this.id = intent.getStringExtra(EXTRA_ID) ?: ""
         this.tokoDetailViewModel.id = this.id
+        this.appDialog = AppDialog(this)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment =
@@ -148,7 +155,61 @@ class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 }
             }
+
+
+            deleteTokoState.observe(this@TokoDetailActivity) {
+                when (it) {
+                    AppState.Loading -> {
+                        appDialog.showLoadingDialog()
+                    }
+
+                    AppState.Standby -> {
+                    }
+
+                    is AppState.Error -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.error(
+                            this@TokoDetailActivity, message = it.message
+                        )
+                    }
+
+                    is AppState.Success<*> -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.success(
+                            this@TokoDetailActivity,
+                            message = "Berhasil menghapus data toko.",
+                            callback = object : AppDialog.Companion.AppDialogCallback {
+
+                                override fun onDismiss() {
+                                    val resultIntent = Intent()
+                                    setResult(RESULT_OK, resultIntent)
+                                    finish()
+                                }
+
+                                override fun onConfirm() {
+                                }
+                            },
+                        )
+                    }
+                }
+            }
         }
+    }
+
+    private fun confirmDelete(context: Context) {
+
+        AppDialog.confirm(context,
+            title = "Hapus Toko?",
+            message = "Apakah anda yakin ingin menghapus toko ini?",
+            callback = object : AppDialog.Companion.AppDialogCallback {
+                override fun onDismiss() {
+                }
+
+                override fun onConfirm() {
+                    this@TokoDetailActivity.tokoDetailViewModel.deleteToko(this@TokoDetailActivity)
+                }
+
+            })
     }
 
     companion object {

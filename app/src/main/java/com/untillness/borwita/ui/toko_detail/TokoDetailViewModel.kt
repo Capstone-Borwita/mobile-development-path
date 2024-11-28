@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.repositories.SharePrefRepository
 import com.untillness.borwita.data.remote.repositories.TokoRepository
+import com.untillness.borwita.data.remote.responses.BaseResponse
 import com.untillness.borwita.data.remote.responses.DataToko
 import com.untillness.borwita.data.remote.responses.ErrorResponse
 import com.untillness.borwita.data.remote.responses.TokoDetailResponse
@@ -28,6 +29,10 @@ class TokoDetailViewModel(context: Context) : ViewModel() {
     private val _detailTokoState: MutableLiveData<AppState<DataToko>> =
         MutableLiveData<AppState<DataToko>>(AppState.Loading)
     val detailTokoState: LiveData<AppState<DataToko>> = _detailTokoState
+
+    private val _deleteTokoState: MutableLiveData<AppState<Boolean>> =
+        MutableLiveData<AppState<Boolean>>(AppState.Standby)
+    val deleteTokoState: LiveData<AppState<Boolean>> = _deleteTokoState
 
     var id: String = ""
 
@@ -65,6 +70,40 @@ class TokoDetailViewModel(context: Context) : ViewModel() {
                 AppState.Success<DataToko>(
                     message = "Berhasil",
                     data = tokoResponse.data ?: DataToko(),
+                )
+            )
+        }
+    }
+
+    fun deleteToko(context: Context) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
+            this._deleteTokoState.postValue(
+                AppState.Error(
+                    message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
+                )
+            )
+        }
+
+        CoroutineScope(coroutineExceptionHandler).launch {
+            _deleteTokoState.postValue(AppState.Loading)
+
+            val response = async {
+                tokoRepository.delete(token = token, id = this@TokoDetailViewModel.id)
+            }.await()
+
+            if (!response.isSuccessful) {
+                _deleteTokoState.postValue(
+                    AppState.Error(
+                        message = "Ada kesalahan, silahkan coba lagi beberapa saat lagi.",
+                    )
+                )
+                return@launch
+            }
+
+            _deleteTokoState.postValue(
+                AppState.Success<Boolean>(
+                    message = "Berhasil",
+                    data = true,
                 )
             )
         }
