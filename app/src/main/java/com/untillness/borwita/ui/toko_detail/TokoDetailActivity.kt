@@ -1,7 +1,8 @@
 package com.untillness.borwita.ui.toko_detail
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -55,6 +56,20 @@ class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         this.tokoDetailViewModel.loadData(this)
 
         this.listeners()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_toko_detail, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == com.untillness.borwita.R.id.button_delete_toko) {
+            confirmDelete(context = this)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
