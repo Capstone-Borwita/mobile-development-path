@@ -238,7 +238,7 @@ class CaptureActivity : AppCompatActivity() {
                         appDialog.hideLoadingDialog()
                         AppDialog.error(
                             context = this@CaptureActivity,
-                            message = this@CaptureActivity.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi),
+                            message = it.message
                         )
                     }
 
