@@ -12,6 +12,11 @@ class TokoRepository {
         id: String,
     ) = Api.getApiService(token).detailToko(id)
 
+    suspend fun delete(
+        token: String,
+        id: String,
+    ) = Api.getApiService(token).deleteToko(id)
+
     suspend fun list(
         token: String,
     ) = Api.getApiService(token).listToko()
