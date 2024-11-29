@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
+import android.view.View
 import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -78,6 +79,8 @@ class CaptureActivity : AppCompatActivity() {
     private val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     private lateinit var appDialog: AppDialog
+    private lateinit var bottomSheetDialog: BottomSheetDialog
+    private lateinit var viewBottomSheetDialog: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +107,10 @@ class CaptureActivity : AppCompatActivity() {
         preview = Preview.Builder().build().also {
             it.surfaceProvider = binding.viewFinder.surfaceProvider
         }
+
+        bottomSheetDialog = BottomSheetDialog(this@CaptureActivity)
+        // on below line we are inflating a layout file which we have created.
+        viewBottomSheetDialog = layoutInflater.inflate(R.layout.bottom_sheet_capture, null)
 
         // Request camera permissions
         if (allPermissionsGranted()) {
@@ -180,48 +187,32 @@ class CaptureActivity : AppCompatActivity() {
                     }
 
                     is AppState.Success -> {
-                        this@CaptureActivity.stopCamera()
-
-                        this@CaptureActivity.binding.iconCamera.isVisible = true
-                        this@CaptureActivity.binding.loading.isVisible = false
-
-                        val dialog = BottomSheetDialog(this@CaptureActivity)
-
-                        // on below line we are inflating a layout file which we have created.
-                        val view = layoutInflater.inflate(R.layout.bottom_sheet_capture, null)
-
-                        val imageResult = view.findViewById<ImageView>(R.id.image_result)
+                        val imageResult =
+                            viewBottomSheetDialog.findViewById<ImageView>(R.id.image_result)
                         Glide.with(this@CaptureActivity).load(it.data.path)
                             .placeholder(AppHelpers.circularProgressDrawable(this@CaptureActivity))
                             .centerCrop().into(imageResult)
 
                         // on below line we are creating a variable for our button
                         // which we are using to dismiss our dialog.
-                        val btnClose = view.findViewById<Button>(R.id.button_cancel)
-                        val btnSubmit = view.findViewById<Button>(R.id.button_submit)
+                        val btnClose =
+                            viewBottomSheetDialog.findViewById<Button>(R.id.button_cancel)
+                        val btnSubmit =
+                            viewBottomSheetDialog.findViewById<Button>(R.id.button_submit)
+
+                        btnSubmit.isEnabled = true
 
                         // on below line we are adding on click listener
                         // for our dismissing the dialog button.
                         btnClose.setOnClickListener {
                             // on below line we are calling a dismiss
                             // method to close our dialog.
-                            dialog.dismiss()
+                            bottomSheetDialog.dismiss()
                             this@CaptureActivity.resumeCamera()
                         }
                         btnSubmit.setOnClickListener {
                             this@CaptureActivity.captureViewModel.doOcr(this@CaptureActivity)
                         }
-                        // below line is use to set cancelable to avoid
-                        // closing of dialog box when clicking on the screen.
-                        dialog.setCancelable(false)
-
-                        // on below line we are setting
-                        // content view to our view.
-                        dialog.setContentView(view)
-
-                        // on below line we are calling
-                        // a show method to display a dialog.
-                        dialog.show()
                     }
                 }
             }
@@ -239,8 +230,7 @@ class CaptureActivity : AppCompatActivity() {
                     is AppState.Error -> {
                         appDialog.hideLoadingDialog()
                         AppDialog.error(
-                            context = this@CaptureActivity,
-                            message = it.message
+                            context = this@CaptureActivity, message = it.message
                         )
                     }
 
@@ -313,6 +303,33 @@ class CaptureActivity : AppCompatActivity() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val uri = output.savedUri!!
 
+                    this@CaptureActivity.stopCamera()
+
+                    this@CaptureActivity.binding.iconCamera.isVisible = true
+                    this@CaptureActivity.binding.loading.isVisible = false
+
+
+                    val imageResult =
+                        viewBottomSheetDialog.findViewById<ImageView>(R.id.image_result)
+                    Glide.with(this@CaptureActivity).load("")
+                        .placeholder(AppHelpers.circularProgressDrawable(this@CaptureActivity))
+                        .centerCrop().into(imageResult)
+
+                    val btnSubmit = viewBottomSheetDialog.findViewById<Button>(R.id.button_submit)
+                    btnSubmit.isEnabled = false
+
+                    // below line is use to set cancelable to avoid
+                    // closing of dialog box when clicking on the screen.
+                    bottomSheetDialog.setCancelable(false)
+
+                    // on below line we are setting
+                    // content view to our view.
+                    bottomSheetDialog.setContentView(viewBottomSheetDialog)
+
+                    // on below line we are calling
+                    // a show method to display a dialog.
+                    bottomSheetDialog.show()
+
                     this@CaptureActivity.captureViewModel.captureAndCrop(
                         context = this@CaptureActivity,
                         contentResolver = this@CaptureActivity.contentResolver,
@@ -334,9 +351,9 @@ class CaptureActivity : AppCompatActivity() {
             // Used to bind the lifecycle of cameras to the lifecycle owner
             cameraProvider = cameraProviderFuture.get()
 
-            imageCapture = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .build()
+            imageCapture =
+                ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                    .build()
 
             try {
                 this.stopCamera()
