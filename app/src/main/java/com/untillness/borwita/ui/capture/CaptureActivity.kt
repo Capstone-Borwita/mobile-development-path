@@ -23,9 +23,12 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -44,9 +47,11 @@ import com.untillness.borwita.databinding.ActivityCaptureBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ExifHelper
 import com.untillness.borwita.helpers.FileHelper
+import com.untillness.borwita.helpers.ImageClassifierHelper
 import com.untillness.borwita.helpers.ImageHelper
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.widgets.AppDialog
+import org.tensorflow.lite.task.vision.classifier.Classifications
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -68,6 +73,9 @@ class CaptureActivity : AppCompatActivity() {
     private lateinit var captureViewModel: CaptureViewModel
 
     private lateinit var cameraProvider: ProcessCameraProvider
+
+    private lateinit var imageClassifierHelper: ImageClassifierHelper
+    private lateinit var imageAnalyzer: ImageAnalysis
 
     // Preview
     private lateinit var preview: Preview
@@ -237,8 +245,7 @@ class CaptureActivity : AppCompatActivity() {
                     is AppState.Error -> {
                         appDialog.hideLoadingDialog()
                         AppDialog.error(
-                            context = this@CaptureActivity,
-                            message = it.message
+                            context = this@CaptureActivity, message = it.message
                         )
                     }
 
@@ -328,7 +335,34 @@ class CaptureActivity : AppCompatActivity() {
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
+        imageClassifierHelper = ImageClassifierHelper(context = this,
+            classifierListener = object : ImageClassifierHelper.ClassifierListener {
+                override fun onError(error: String) {
+                    runOnUiThread {
+                        AppHelpers.log(error)
+                    }
+                }
+
+                override fun onResults(results: List<Classifications>?) {
+                    runOnUiThread {
+                        AppHelpers.log(results.toString())
+                    }
+                }
+            })
+
         cameraProviderFuture.addListener({
+            val resolutionSelector = ResolutionSelector.Builder()
+                .setAspectRatioStrategy(AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY)
+                .build()
+
+            imageAnalyzer = ImageAnalysis.Builder().setResolutionSelector(resolutionSelector)
+                .setTargetRotation(binding.viewFinder.display.rotation)
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
+            imageAnalyzer.setAnalyzer(Executors.newSingleThreadExecutor()) { image ->
+                imageClassifierHelper.classifyImage(image)
+            }
+
             // Used to bind the lifecycle of cameras to the lifecycle owner
             cameraProvider = cameraProviderFuture.get()
 
@@ -383,7 +417,11 @@ class CaptureActivity : AppCompatActivity() {
 
         // Bind use cases to camera
         cameraProvider.bindToLifecycle(
-            this, cameraSelector, preview, imageCapture
+            this,
+            cameraSelector,
+            preview,
+            imageCapture,
+            imageAnalyzer,
         )
 
         animator?.start()
