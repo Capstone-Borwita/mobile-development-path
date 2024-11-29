@@ -1,5 +1,6 @@
 package com.untillness.borwita.ui.toko_detail
 
+<<<<<<< HEAD
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -51,6 +52,20 @@ class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(this.binding.main) { v, insets ->
+=======
+import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.untillness.borwita.R
+
+class TokoDetailActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_toko_detail)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+>>>>>>> 97dcba9 (Initial commit)
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -59,6 +74,7 @@ class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
         title = "Detail Toko"
+<<<<<<< HEAD
 
         this.tokoDetailViewModel.loadData(this)
 
@@ -77,12 +93,15 @@ class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             confirmDelete(context = this)
         }
         return super.onOptionsItemSelected(item)
+=======
+>>>>>>> 97dcba9 (Initial commit)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return super.onSupportNavigateUp()
     }
+<<<<<<< HEAD
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
@@ -215,4 +234,6 @@ class TokoDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         const val EXTRA_ID = "EXTRA_ID"
     }
+=======
+>>>>>>> 97dcba9 (Initial commit)
 }

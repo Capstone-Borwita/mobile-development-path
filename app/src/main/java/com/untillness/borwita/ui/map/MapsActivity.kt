@@ -1,5 +1,6 @@
 package com.untillness.borwita.ui.map
 
+<<<<<<< HEAD
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,12 +12,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+=======
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+>>>>>>> 97dcba9 (Initial commit)
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+<<<<<<< HEAD
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.data.states.AppState
@@ -30,6 +36,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
     private lateinit var mapViewModel: MapViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+=======
+import com.google.android.gms.maps.model.MarkerOptions
+import com.untillness.borwita.R
+import com.untillness.borwita.databinding.ActivityMapsBinding
+
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+
+    private lateinit var mMap: GoogleMap
+    private lateinit var binding: ActivityMapsBinding
+>>>>>>> 97dcba9 (Initial commit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +53,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+<<<<<<< HEAD
         supportActionBar?.hide()
 
         this.mapViewModel = ViewModelFactory.obtainViewModel<MapViewModel>(this)
@@ -50,6 +67,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         this.listeners()
 
         this.triggers()
+=======
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+>>>>>>> 97dcba9 (Initial commit)
     }
 
     /**
@@ -62,6 +85,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+<<<<<<< HEAD
         map = googleMap
 
 
@@ -237,5 +261,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         const val RESULT_MAP_EXTRA = "RESULT_MAP_EXTRA"
         const val RESULT_MAP_CODE = 111
+=======
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+>>>>>>> 97dcba9 (Initial commit)
     }
 }

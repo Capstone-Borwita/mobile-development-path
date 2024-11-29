@@ -2,12 +2,20 @@ package com.untillness.borwita.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+<<<<<<< HEAD
+=======
+import androidx.activity.enableEdgeToEdge
+>>>>>>> 97dcba9 (Initial commit)
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.requests.LoginRequest
+<<<<<<< HEAD
 import com.untillness.borwita.data.states.AppState
+=======
+import com.untillness.borwita.data.states.ApiState
+>>>>>>> 97dcba9 (Initial commit)
 import com.untillness.borwita.databinding.ActivityLoginBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
@@ -45,6 +53,7 @@ class LoginActivity : Unfocus() {
         this.loginViewModel.apply {
             this.loginState.observe(this@LoginActivity) {
                 when (it) {
+<<<<<<< HEAD
                     AppState.Loading -> {
                         appDialog.showLoadingDialog()
                     }
@@ -54,13 +63,28 @@ class LoginActivity : Unfocus() {
                     }
 
                     is AppState.Error -> {
+=======
+                    ApiState.Loading -> {
+                        appDialog.showLoadingDialog()
+                    }
+
+                    ApiState.Standby -> {
+                        appDialog.hideLoadingDialog()
+                    }
+
+                    is ApiState.Error -> {
+>>>>>>> 97dcba9 (Initial commit)
                         appDialog.hideLoadingDialog()
                         AppDialog.error(
                             this@LoginActivity, message = it.message
                         )
                     }
 
+<<<<<<< HEAD
                     is AppState.Success<*> -> {
+=======
+                    is ApiState.Success<*> -> {
+>>>>>>> 97dcba9 (Initial commit)
                         appDialog.hideLoadingDialog()
                         AppDialog.success(
                             this@LoginActivity,

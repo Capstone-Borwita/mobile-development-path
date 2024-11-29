@@ -7,12 +7,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+<<<<<<< HEAD
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.untillness.borwita.R
 import com.untillness.borwita.data.states.AppState
+=======
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
+import com.untillness.borwita.R
+import com.untillness.borwita.data.states.ApiState
+>>>>>>> 97dcba9 (Initial commit)
 import com.untillness.borwita.databinding.FragmentProfileBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
@@ -37,9 +49,15 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         this.profileViewModel =
+<<<<<<< HEAD
             ViewModelFactory.obtainViewModel<ProfileViewModel>(this.requireActivity())
         this.wrapperViewModel =
             ViewModelFactory.obtainViewModel<WrapperViewModel>(this.requireActivity())
+=======
+            ViewModelFactory.fromFragment<ProfileViewModel>(this.requireActivity())
+        this.wrapperViewModel =
+            ViewModelFactory.fromFragment<WrapperViewModel>(this.requireActivity())
+>>>>>>> 97dcba9 (Initial commit)
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -61,28 +79,44 @@ class ProfileFragment : Fragment() {
             profileState.observe(viewLifecycleOwner) {
 
                 when (it) {
+<<<<<<< HEAD
                     AppState.Loading -> {
+=======
+                    ApiState.Loading -> {
+>>>>>>> 97dcba9 (Initial commit)
                         this@ProfileFragment.binding.apply {
                             widgetProfileSection.main.isVisible = false
                             widgetProfileSectionShimmer.main.isVisible = true
                         }
                     }
 
+<<<<<<< HEAD
                     AppState.Standby -> {
+=======
+                    ApiState.Standby -> {
+>>>>>>> 97dcba9 (Initial commit)
                         this@ProfileFragment.binding.apply {
                             widgetProfileSection.main.isVisible = false
                             widgetProfileSectionShimmer.main.isVisible = false
                         }
                     }
 
+<<<<<<< HEAD
                     is AppState.Error -> {
+=======
+                    is ApiState.Error -> {
+>>>>>>> 97dcba9 (Initial commit)
                         this@ProfileFragment.binding.apply {
                             widgetProfileSection.main.isVisible = false
                             widgetProfileSectionShimmer.main.isVisible = false
                         }
                     }
 
+<<<<<<< HEAD
                     is AppState.Success -> {
+=======
+                    is ApiState.Success -> {
+>>>>>>> 97dcba9 (Initial commit)
                         this@ProfileFragment.binding.apply {
                             widgetProfileSection.main.isVisible = true
                             widgetProfileSectionShimmer.main.isVisible = false

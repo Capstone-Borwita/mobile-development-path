@@ -8,11 +8,18 @@
     tools:context=".ui.toko_store.TokoStoreActivity"
     android:clipToPadding="false">
 
+<<<<<<< HEAD
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="32dp"
         android:orientation="vertical"
+=======
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp"
+>>>>>>> 97dcba9 (Initial commit)
         >
 
         <com.google.android.material.card.MaterialCardView
@@ -90,7 +97,10 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_phone"
+<<<<<<< HEAD
                 android:inputType="phone"
+=======
+>>>>>>> 97dcba9 (Initial commit)
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -111,6 +121,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+<<<<<<< HEAD
+=======
+            android:layout_marginVertical="16dp"
+>>>>>>> 97dcba9 (Initial commit)
             android:text="Foto KTP"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -122,7 +136,11 @@
             android:id="@+id/section_foto_ktp"
             style="?attr/materialCardViewFilledStyle"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="230dp"
+=======
+            android:layout_height="180dp"
+>>>>>>> 97dcba9 (Initial commit)
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             app:cardBackgroundColor="@color/md_theme_primaryFixed"
@@ -138,7 +156,11 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <TextView
+<<<<<<< HEAD
                     android:id="@+id/text_placeholder_image_ktp"
+=======
+                    android:id="@+id/text_placeholder_image_story"
+>>>>>>> 97dcba9 (Initial commit)
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -146,7 +168,11 @@
                     android:textAlignment="center" />
 
                 <ImageView
+<<<<<<< HEAD
                     android:id="@+id/image_ktp"
+=======
+                    android:id="@+id/image_story"
+>>>>>>> 97dcba9 (Initial commit)
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/deskripsi"
@@ -192,7 +218,10 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_nomor_nik"
+<<<<<<< HEAD
                 android:inputType="phone"
+=======
+>>>>>>> 97dcba9 (Initial commit)
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -264,6 +293,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+<<<<<<< HEAD
+=======
+            android:layout_marginVertical="16dp"
+>>>>>>> 97dcba9 (Initial commit)
             android:text="Foto Toko"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -338,7 +371,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+<<<<<<< HEAD
             android:layout_marginTop="16dp"
+=======
+            android:layout_marginVertical="16dp"
+>>>>>>> 97dcba9 (Initial commit)
             android:text="Alamat Toko"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -357,13 +394,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_label_alamat">
+<<<<<<< HEAD
                 <TextView
                     android:id="@+id/text_placeholder_image_alamat"
+=======
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
+
+                <TextView
+                    android:id="@+id/text_placeholder_imagealamat"
+>>>>>>> 97dcba9 (Initial commit)
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Pilih Alamat"
                     android:textAlignment="center" />
+<<<<<<< HEAD
         </com.google.android.material.card.MaterialCardView>
 
 
@@ -398,6 +449,20 @@
 
 
 
+=======
+
+                <ImageView
+                    android:id="@+id/image_alamat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/deskripsi"
+                    android:src="@drawable/ic_launcher_background"
+                    android:transitionName="image_story" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+>>>>>>> 97dcba9 (Initial commit)
         <LinearLayout
             android:id="@+id/section_button_alamat"
             android:layout_width="match_parent"
@@ -433,5 +498,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/section_button_alamat"/>
+<<<<<<< HEAD
     </LinearLayout>
+=======
+    </androidx.constraintlayout.widget.ConstraintLayout>
+>>>>>>> 97dcba9 (Initial commit)
 </androidx.core.widget.NestedScrollView>

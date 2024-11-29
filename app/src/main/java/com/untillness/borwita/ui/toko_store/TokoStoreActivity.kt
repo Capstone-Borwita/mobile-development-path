@@ -1,12 +1,17 @@
 package com.untillness.borwita.ui.toko_store
 
+<<<<<<< HEAD
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+=======
+import android.content.Intent
+>>>>>>> 97dcba9 (Initial commit)
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
+<<<<<<< HEAD
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +49,20 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var tokoStoreViewModel: TokoStoreViewModel
     private lateinit var appDialog: AppDialog
+=======
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.untillness.borwita.R
+import com.untillness.borwita.databinding.ActivityTokoStoreBinding
+import com.untillness.borwita.helpers.AppHelpers
+import com.untillness.borwita.helpers.Unfocus
+import com.untillness.borwita.ui.capture.CaptureActivity
+import com.untillness.borwita.ui.map.MapsActivity
+
+class TokoStoreActivity : Unfocus() {
+    private lateinit var binding: ActivityTokoStoreBinding
+>>>>>>> 97dcba9 (Initial commit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +77,7 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
+<<<<<<< HEAD
         this.tokoStoreViewModel = ViewModelFactory.obtainViewModel<TokoStoreViewModel>(this)
         this.appDialog = AppDialog(this)
 
@@ -74,6 +94,12 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         this.triggers()
 
         this.listeners()
+=======
+
+        title = "Tambah Toko"
+
+        this.triggers()
+>>>>>>> 97dcba9 (Initial commit)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -81,6 +107,7 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         return super.onSupportNavigateUp()
     }
 
+<<<<<<< HEAD
     private fun triggers() {
         this.binding.apply {
             buttonKameraKtp.setOnClickListener {
@@ -90,10 +117,18 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
             buttonGaleriToko.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+=======
+    private fun triggers(){
+        this.binding.apply {
+            buttonKameraKtp.setOnClickListener {
+                val intent = Intent(this@TokoStoreActivity, CaptureActivity::class.java)
+                startActivity(intent)
+>>>>>>> 97dcba9 (Initial commit)
             }
 
             buttonMapToko.setOnClickListener {
                 val intent = Intent(this@TokoStoreActivity, MapsActivity::class.java)
+<<<<<<< HEAD
                 resultLauncher.launch(intent)
             }
             buttonStore.setOnClickListener {
@@ -308,4 +343,10 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         map = googleMap
         map.uiSettings.setAllGesturesEnabled(false)
     }
+=======
+                startActivity(intent)
+            }
+        }
+    }
+>>>>>>> 97dcba9 (Initial commit)
 }

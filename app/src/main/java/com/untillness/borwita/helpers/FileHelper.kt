@@ -4,7 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+<<<<<<< HEAD
 import com.untillness.borwita.R
+=======
+>>>>>>> 97dcba9 (Initial commit)
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -58,6 +61,7 @@ class FileHelper {
             bitmap?.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
             return file
         }
+<<<<<<< HEAD
 
         fun getOutputDirectory(context: Context): File {
             val appContext = context.applicationContext
@@ -66,6 +70,8 @@ class FileHelper {
             }
             return if (mediaDir != null && mediaDir.exists()) mediaDir else appContext.filesDir
         }
+=======
+>>>>>>> 97dcba9 (Initial commit)
     }
 
 }

@@ -4,21 +4,31 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.ContentValues
+<<<<<<< HEAD
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+=======
+import android.content.pm.PackageManager
+>>>>>>> 97dcba9 (Initial commit)
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+<<<<<<< HEAD
 import android.util.Size
 import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
+=======
+import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.animation.AccelerateDecelerateInterpolator
+>>>>>>> 97dcba9 (Initial commit)
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +40,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+<<<<<<< HEAD
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -48,6 +59,10 @@ import com.untillness.borwita.helpers.ImageHelper
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.widgets.AppDialog
 import java.io.File
+=======
+import com.untillness.borwita.R
+import com.untillness.borwita.databinding.ActivityCaptureBinding
+>>>>>>> 97dcba9 (Initial commit)
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -63,6 +78,7 @@ class CaptureActivity : AppCompatActivity() {
     private lateinit var viewFinderRect: Rect
 
     var animator: ObjectAnimator? = null
+<<<<<<< HEAD
     private lateinit var outputDirectory: File
 
     private lateinit var captureViewModel: CaptureViewModel
@@ -76,6 +92,8 @@ class CaptureActivity : AppCompatActivity() {
     private val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     private lateinit var appDialog: AppDialog
+=======
+>>>>>>> 97dcba9 (Initial commit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,20 +107,26 @@ class CaptureActivity : AppCompatActivity() {
             insets
         }
 
+<<<<<<< HEAD
         this.captureViewModel = ViewModelFactory.obtainViewModel<CaptureViewModel>(this)
         appDialog = AppDialog(this)
 
+=======
+>>>>>>> 97dcba9 (Initial commit)
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
         title = "Ambil Foto KTP"
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+<<<<<<< HEAD
         outputDirectory = FileHelper.getOutputDirectory(this)
 
         preview = Preview.Builder().build().also {
             it.surfaceProvider = binding.viewFinder.surfaceProvider
         }
 
+=======
+>>>>>>> 97dcba9 (Initial commit)
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -112,8 +136,11 @@ class CaptureActivity : AppCompatActivity() {
 
         this.triggers()
 
+<<<<<<< HEAD
         this.listeners()
 
+=======
+>>>>>>> 97dcba9 (Initial commit)
         this.cropRectanglePreview()
 
         this.animateScanEffect()
@@ -151,6 +178,7 @@ class CaptureActivity : AppCompatActivity() {
         })
     }
 
+<<<<<<< HEAD
     private fun listeners() {
         this.captureViewModel.apply {
             captureState.observe(this@CaptureActivity) {
@@ -263,6 +291,11 @@ class CaptureActivity : AppCompatActivity() {
         binding.imageCaptureButton.setOnClickListener {
             takePhoto()
         }
+=======
+    private fun triggers() {
+        // Set up the listeners for take photo and video capture buttons
+        binding.imageCaptureButton.setOnClickListener { takePhoto() }
+>>>>>>> 97dcba9 (Initial commit)
     }
 
     private fun cropRectanglePreview() {
@@ -278,6 +311,7 @@ class CaptureActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
+<<<<<<< HEAD
         if (this@CaptureActivity.captureViewModel.captureState.value is AppState.Loading) return
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
@@ -286,6 +320,11 @@ class CaptureActivity : AppCompatActivity() {
             AppState.Loading
         )
 
+=======
+        // Get a stable reference of the modifiable image capture use case
+        val imageCapture = imageCapture ?: return
+
+>>>>>>> 97dcba9 (Initial commit)
         // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
@@ -309,6 +348,7 @@ class CaptureActivity : AppCompatActivity() {
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+<<<<<<< HEAD
                     val uri = output.savedUri!!
 
                     this@CaptureActivity.captureViewModel.captureAndCrop(
@@ -321,6 +361,11 @@ class CaptureActivity : AppCompatActivity() {
                         viewFinder = binding.viewFinder,
                         viewFinderRect = viewFinderRect,
                     )
+=======
+                    val msg = "Photo capture succeeded: ${output.savedUri}"
+                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, msg)
+>>>>>>> 97dcba9 (Initial commit)
                 }
             })
     }
@@ -330,6 +375,7 @@ class CaptureActivity : AppCompatActivity() {
 
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
+<<<<<<< HEAD
             cameraProvider = cameraProviderFuture.get()
 
             imageCapture = ImageCapture.Builder().build()
@@ -338,6 +384,28 @@ class CaptureActivity : AppCompatActivity() {
                 this.stopCamera()
 
                 this.resumeCamera()
+=======
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            // Preview
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+            }
+
+            imageCapture = ImageCapture.Builder().build()
+
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageCapture
+                )
+>>>>>>> 97dcba9 (Initial commit)
 
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
@@ -372,6 +440,7 @@ class CaptureActivity : AppCompatActivity() {
         }
     }
 
+<<<<<<< HEAD
     private fun stopCamera() {
         // Unbind use cases before rebinding
         cameraProvider.unbindAll()
@@ -393,14 +462,22 @@ class CaptureActivity : AppCompatActivity() {
         private const val TAG = "Borwita"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val PHOTO_EXTENSION = ".jpg"
+=======
+    companion object {
+        private const val TAG = "Borwita"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+>>>>>>> 97dcba9 (Initial commit)
         private val REQUIRED_PERMISSIONS = mutableListOf(
             Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO
         ).apply {
 //            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }.toTypedArray()
+<<<<<<< HEAD
 
 
         const val RESULT_OCR_EXTRA = "RESULT_OCR_EXTRA"
         const val RESULT_OCR_CODE = 222
+=======
+>>>>>>> 97dcba9 (Initial commit)
     }
 }

@@ -1,16 +1,29 @@
 package com.untillness.borwita.ui.register
 
 import android.os.Bundle
+<<<<<<< HEAD
+=======
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+>>>>>>> 97dcba9 (Initial commit)
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
+<<<<<<< HEAD
 import com.untillness.borwita.data.states.AppState
+=======
+import com.untillness.borwita.data.states.ApiState
+>>>>>>> 97dcba9 (Initial commit)
 import com.untillness.borwita.databinding.ActivityRegisterBinding
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.widgets.AppDialog
+<<<<<<< HEAD
+=======
+import okhttp3.MediaType.Companion.toMediaType
+>>>>>>> 97dcba9 (Initial commit)
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class RegisterActivity : Unfocus() {
@@ -63,6 +76,7 @@ class RegisterActivity : Unfocus() {
         this.registerViewModel.apply {
             registerState.observe(this@RegisterActivity) {
                 when (it) {
+<<<<<<< HEAD
                     AppState.Loading -> {
                         appDialog.showLoadingDialog()
                     }
@@ -72,13 +86,28 @@ class RegisterActivity : Unfocus() {
                     }
 
                     is AppState.Error -> {
+=======
+                    ApiState.Loading -> {
+                        appDialog.showLoadingDialog()
+                    }
+
+                    ApiState.Standby -> {
+                        appDialog.hideLoadingDialog()
+                    }
+
+                    is ApiState.Error -> {
+>>>>>>> 97dcba9 (Initial commit)
                         appDialog.hideLoadingDialog()
                         AppDialog.error(
                             this@RegisterActivity, message = it.message
                         )
                     }
 
+<<<<<<< HEAD
                     is AppState.Success<*> -> {
+=======
+                    is ApiState.Success<*> -> {
+>>>>>>> 97dcba9 (Initial commit)
                         appDialog.hideLoadingDialog()
                         AppDialog.success(
                             this@RegisterActivity,

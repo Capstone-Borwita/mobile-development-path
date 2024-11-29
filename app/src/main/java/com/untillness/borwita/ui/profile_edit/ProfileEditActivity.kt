@@ -3,10 +3,22 @@ package com.untillness.borwita.ui.profile_edit
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+<<<<<<< HEAD
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+=======
+import android.os.Build
+import android.os.Bundle
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BuildCompat
+>>>>>>> 97dcba9 (Initial commit)
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -15,7 +27,11 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.untillness.borwita.R
 import com.untillness.borwita.data.remote.requests.ProfileEditRequest
+<<<<<<< HEAD
 import com.untillness.borwita.data.states.AppState
+=======
+import com.untillness.borwita.data.states.ApiState
+>>>>>>> 97dcba9 (Initial commit)
 import com.untillness.borwita.databinding.ActivityProfileEditBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
@@ -121,28 +137,44 @@ class ProfileEditActivity : Unfocus() {
             profileState.observe(this@ProfileEditActivity) {
 
                 when (it) {
+<<<<<<< HEAD
                     AppState.Loading -> {
+=======
+                    ApiState.Loading -> {
+>>>>>>> 97dcba9 (Initial commit)
                         this@ProfileEditActivity.binding.apply {
                             mainSection.isVisible = false
                             loading.isVisible = true
                         }
                     }
 
+<<<<<<< HEAD
                     AppState.Standby -> {
+=======
+                    ApiState.Standby -> {
+>>>>>>> 97dcba9 (Initial commit)
                         this@ProfileEditActivity.binding.apply {
                             mainSection.isVisible = false
                             loading.isVisible = false
                         }
                     }
 
+<<<<<<< HEAD
                     is AppState.Error -> {
+=======
+                    is ApiState.Error -> {
+>>>>>>> 97dcba9 (Initial commit)
                         this@ProfileEditActivity.binding.apply {
                             mainSection.isVisible = false
                             loading.isVisible = false
                         }
                     }
 
+<<<<<<< HEAD
                     is AppState.Success -> {
+=======
+                    is ApiState.Success -> {
+>>>>>>> 97dcba9 (Initial commit)
                         this@ProfileEditActivity.binding.apply {
                             mainSection.isVisible = true
                             loading.isVisible = false
@@ -165,24 +197,40 @@ class ProfileEditActivity : Unfocus() {
         this.profileEditViewModel.profileEditPhotoState.observe(this) {
 
             when (it) {
+<<<<<<< HEAD
                 AppState.Loading -> {
+=======
+                ApiState.Loading -> {
+>>>>>>> 97dcba9 (Initial commit)
                     appDialog.showLoadingDialog()
 
                 }
 
+<<<<<<< HEAD
                 AppState.Standby -> {
+=======
+                ApiState.Standby -> {
+>>>>>>> 97dcba9 (Initial commit)
                     appDialog.hideLoadingDialog()
 
                 }
 
+<<<<<<< HEAD
                 is AppState.Error -> {
+=======
+                is ApiState.Error -> {
+>>>>>>> 97dcba9 (Initial commit)
                     appDialog.hideLoadingDialog()
                     AppDialog.error(
                         this@ProfileEditActivity, message = it.message
                     )
                 }
 
+<<<<<<< HEAD
                 is AppState.Success -> {
+=======
+                is ApiState.Success -> {
+>>>>>>> 97dcba9 (Initial commit)
                     appDialog.hideLoadingDialog()
                     this@ProfileEditActivity.wrapperViewModel.initState(this@ProfileEditActivity)
 

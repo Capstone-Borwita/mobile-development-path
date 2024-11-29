@@ -4,8 +4,11 @@
 
     <uses-feature android:name="android.hardware.camera.any" />
 
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+=======
+>>>>>>> 97dcba9 (Initial commit)
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -25,6 +28,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
+<<<<<<< HEAD
+=======
+        <!-- DetailBeritaActivity -->
+        <activity
+            android:name=".ui.berita.DetailBeritaActivity"
+            android:exported="false"/>
+>>>>>>> 97dcba9 (Initial commit)
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 

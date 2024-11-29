@@ -13,8 +13,13 @@ android {
         applicationId = "com.untillness.borwita"
         minSdk = 30
         targetSdk = 35
+<<<<<<< HEAD
         versionCode = 2
         versionName = "1.0.2"
+=======
+        versionCode = 1
+        versionName = "1.0"
+>>>>>>> 97dcba9 (Initial commit)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL_V1", "\"http://34.101.188.121/\"")

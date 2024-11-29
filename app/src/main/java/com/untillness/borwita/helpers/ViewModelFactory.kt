@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.untillness.borwita.MainViewModel
+<<<<<<< HEAD
 import com.untillness.borwita.ui.capture.CaptureViewModel
 import com.untillness.borwita.ui.login.LoginViewModel
 import com.untillness.borwita.ui.map.MapViewModel
@@ -18,6 +19,15 @@ import com.untillness.borwita.ui.wrapper.WrapperViewModel
 import com.untillness.borwita.ui.wrapper.fragments.home.HomeViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileViewModel
 import com.untillness.borwita.ui.wrapper.fragments.toko.TokoViewModel
+=======
+import com.untillness.borwita.ui.login.LoginViewModel
+import com.untillness.borwita.ui.profile_edit.ProfileEditViewModel
+import com.untillness.borwita.ui.profile_password.ProfilePasswordViewModel
+import com.untillness.borwita.ui.register.RegisterViewModel
+import com.untillness.borwita.ui.wrapper.WrapperViewModel
+import com.untillness.borwita.ui.wrapper.fragments.home.HomeViewModel
+import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileViewModel
+>>>>>>> 97dcba9 (Initial commit)
 
 class ViewModelFactory private constructor(private val mApplication: Application) :
     ViewModelProvider.NewInstanceFactory() {
@@ -41,7 +51,11 @@ class ViewModelFactory private constructor(private val mApplication: Application
             val factory = getInstance(activity.application)
             return ViewModelProvider(activity, factory)[T::class.java]
         }
+<<<<<<< HEAD
         inline fun <reified T : ViewModel> obtainViewModel(activity: FragmentActivity): T {
+=======
+        inline fun <reified T : ViewModel> fromFragment(activity: FragmentActivity): T {
+>>>>>>> 97dcba9 (Initial commit)
             val factory = getInstance(activity.application)
             return ViewModelProvider(activity, factory)[T::class.java]
         }
@@ -73,6 +87,7 @@ class ViewModelFactory private constructor(private val mApplication: Application
         if (modelClass.isAssignableFrom(ProfileEditViewModel::class.java)) {
             return ProfileEditViewModel(mApplication) as T
         }
+<<<<<<< HEAD
         if (modelClass.isAssignableFrom(MapViewModel::class.java)) {
             return MapViewModel() as T
         }
@@ -88,6 +103,8 @@ class ViewModelFactory private constructor(private val mApplication: Application
         if (modelClass.isAssignableFrom(TokoDetailViewModel::class.java)) {
             return TokoDetailViewModel(mApplication) as T
         }
+=======
+>>>>>>> 97dcba9 (Initial commit)
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 }
