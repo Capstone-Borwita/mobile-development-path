@@ -11,6 +11,8 @@ material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
 playServicesLocation = "21.3.0"
+playServicesTfliteGpu = "16.3.0"
+playServicesTfliteSupport = "16.3.0"
 swiperefreshlayoutVersion = "1.1.0"
 shimmer = "0.5.0"
 preference = "1.2.1"
@@ -25,6 +27,7 @@ lifecycleViewmodelKtx = "2.8.7"
 navigationFragmentKtx = "2.8.4"
 navigationUiKtx = "2.8.4"
 tensorflowLite = "2.9.0"
+tensorflowLiteTaskVisionPlayServices = "0.4.2"
 ucrop = "2.2.8"
 tensorflowLiteSupport = "0.1.0"
 tensorflowLiteMetadata = "0.1.0"
@@ -39,6 +42,7 @@ androidx-camera-mlkit-vision = { module = "androidx.camera:camera-mlkit-vision",
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraxVersion" }
 androidx-camera-video = { module = "androidx.camera:camera-video", version.ref = "cameraxVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+gms-play-services-tflite-gpu = { module = "com.google.android.gms:play-services-tflite-gpu", version.ref = "playServicesTfliteGpu" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -47,6 +51,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+play-services-tflite-support = { module = "com.google.android.gms:play-services-tflite-support", version.ref = "playServicesTfliteSupport" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayoutVersion" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
@@ -61,6 +66,8 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
+tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLite" }
+tensorflow-lite-task-vision-play-services = { module = "org.tensorflow:tensorflow-lite-task-vision-play-services", version.ref = "tensorflowLiteTaskVisionPlayServices" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 tensorflow-lite-support = { group = "org.tensorflow", name = "tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
 tensorflow-lite-metadata = { group = "org.tensorflow", name = "tensorflow-lite-metadata", version.ref = "tensorflowLiteMetadata" }

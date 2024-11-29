@@ -103,10 +103,10 @@ dependencies {
     implementation(libs.tensorflow.lite.metadata)
     implementation(libs.tensorflow.lite.task.vision)
 
-    implementation("org.tensorflow:tensorflow-lite-task-vision-play-services:0.4.2")
-    implementation("com.google.android.gms:play-services-tflite-support:16.1.0")
-    implementation("com.google.android.gms:play-services-tflite-gpu:16.2.0")
-    implementation("org.tensorflow:tensorflow-lite-gpu:2.9.0")
+    implementation(libs.tensorflow.lite.task.vision.play.services)
+    implementation(libs.play.services.tflite.support)
+    implementation(libs.gms.play.services.tflite.gpu)
+    implementation(libs.tensorflow.lite.gpu)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
