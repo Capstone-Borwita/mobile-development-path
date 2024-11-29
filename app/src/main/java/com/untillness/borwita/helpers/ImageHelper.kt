@@ -135,7 +135,7 @@ class ImageHelper {
         fun storeImage(image: Bitmap, photoFile: File): Uri {
             try {
                 val fos = FileOutputStream(photoFile)
-                image.compress(Bitmap.CompressFormat.PNG, 90, fos)
+                image.compress(Bitmap.CompressFormat.PNG, 60, fos)
                 fos.close()
             } catch (e: FileNotFoundException) {
                 Log.d("SAID", "File not found: " + e.message)
