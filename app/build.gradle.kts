@@ -17,7 +17,7 @@ android {
         versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL_V1", "\"http://34.101.188.121/\"")
+        buildConfigField("String", "BASE_URL_V1", "\"https://borwita-ktp-api.ignorelist.com/\"")
     }
 
     buildTypes {
