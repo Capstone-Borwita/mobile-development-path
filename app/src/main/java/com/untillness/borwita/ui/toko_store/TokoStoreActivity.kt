@@ -193,6 +193,34 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                     }
                 }
             }
+
+            ocrState.observe(this@TokoStoreActivity) {
+                when (it) {
+                    AppState.Loading -> {
+                        appDialog.showLoadingDialog()
+                    }
+
+                    AppState.Standby -> {
+                        appDialog.hideLoadingDialog()
+                    }
+
+                    is AppState.Error -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.error(
+                            context = this@TokoStoreActivity, message = it.message
+                        )
+                    }
+
+                    is AppState.Success -> {
+                        appDialog.hideLoadingDialog()
+                        val dataOcr: DataOcr = it.data
+                        dataOcr.localPath =
+                            this@TokoStoreActivity.tokoStoreViewModel.capturedImageKtp.path
+
+                        this@TokoStoreActivity.tokoStoreViewModel.assignSelectedKtp(it.data)
+                    }
+                }
+            }
         }
     }
 
