@@ -22,6 +22,7 @@ import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ExifHelper
 import com.untillness.borwita.helpers.FileHelper
+import com.untillness.borwita.helpers.FileHelper.Companion.reduceFileImage
 import com.untillness.borwita.helpers.ImageHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -114,7 +115,7 @@ class CaptureViewModel(context: Context) : ViewModel() {
         CoroutineScope(coroutineExceptionHandler).launch {
             _ocrState.postValue(AppState.Loading)
 
-            val imageFile = FileHelper.uriToFile(capturedImage, context)
+            val imageFile = FileHelper.uriToFile(capturedImage, context).reduceFileImage()
 
             AppHelpers.log(AppHelpers.getFileSizeInMB(imageFile))
 
