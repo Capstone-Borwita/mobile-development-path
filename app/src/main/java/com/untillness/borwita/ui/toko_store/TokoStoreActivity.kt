@@ -231,6 +231,25 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         }
     }
 
+    private val launchGalleryKtp = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+
+        val destinationUri = Uri.fromFile(File(cacheDir, "cropped"))
+
+        val options = UCrop.Options()
+        options.setAspectRatioOptions(
+            0, AspectRatio(
+                "KTP",
+                19.toFloat(),
+                12.toFloat(),
+            )
+        )
+
+        UCrop.of(uri, destinationUri).withOptions(options).start(this)
+    }
+
     private val launcherGallery = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
