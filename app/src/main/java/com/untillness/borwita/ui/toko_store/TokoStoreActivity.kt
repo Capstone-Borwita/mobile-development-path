@@ -111,6 +111,8 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                 this@TokoStoreActivity.binding.apply {
                     Glide.with(this@TokoStoreActivity).load(it.localPath?.let { File(it).path })
                         .placeholder(AppHelpers.circularProgressDrawable(this@TokoStoreActivity))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .centerCrop().into(imageKtp)
 
                     textPlaceholderImageKtp.isVisible = false
