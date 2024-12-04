@@ -328,6 +328,21 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
         return errors.isNotEmpty()
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            val resultUri = UCrop.getOutput(data!!)
+
+            this@TokoStoreActivity.tokoStoreViewModel.capturedImageKtp = resultUri ?: Uri.parse("")
+            this@TokoStoreActivity.tokoStoreViewModel.doOcr(
+                context = this@TokoStoreActivity, capturedImage = resultUri ?: Uri.parse("")
+            )
+        }
+    }
+
+
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.uiSettings.setAllGesturesEnabled(false)
