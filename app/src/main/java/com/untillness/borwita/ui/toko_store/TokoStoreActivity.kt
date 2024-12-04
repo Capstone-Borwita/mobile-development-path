@@ -91,6 +91,9 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
             buttonGaleriToko.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
+            buttonGaleriKtp.setOnClickListener {
+                launchGalleryKtp.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
 
             buttonMapToko.setOnClickListener {
                 val intent = Intent(this@TokoStoreActivity, MapsActivity::class.java)
