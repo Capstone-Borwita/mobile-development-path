@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -33,10 +34,14 @@ import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.capture.CaptureActivity
+import com.untillness.borwita.ui.capture.CaptureActivity.Companion.RESULT_OCR_CODE
+import com.untillness.borwita.ui.capture.CaptureActivity.Companion.RESULT_OCR_EXTRA
 import com.untillness.borwita.ui.map.MapsActivity
 import com.untillness.borwita.ui.map.MapsActivity.Companion.RESULT_MAP_CODE
 import com.untillness.borwita.ui.map.MapsActivity.Companion.RESULT_MAP_EXTRA
 import com.untillness.borwita.widgets.AppDialog
+import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.model.AspectRatio
 import java.io.File
 
 class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
