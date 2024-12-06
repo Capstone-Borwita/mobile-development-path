@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -33,10 +34,14 @@ import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.Unfocus
 import com.untillness.borwita.helpers.ViewModelFactory
 import com.untillness.borwita.ui.capture.CaptureActivity
+import com.untillness.borwita.ui.capture.CaptureActivity.Companion.RESULT_OCR_CODE
+import com.untillness.borwita.ui.capture.CaptureActivity.Companion.RESULT_OCR_EXTRA
 import com.untillness.borwita.ui.map.MapsActivity
 import com.untillness.borwita.ui.map.MapsActivity.Companion.RESULT_MAP_CODE
 import com.untillness.borwita.ui.map.MapsActivity.Companion.RESULT_MAP_EXTRA
 import com.untillness.borwita.widgets.AppDialog
+import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.model.AspectRatio
 import java.io.File
 
 class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
@@ -91,6 +96,9 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
             buttonGaleriToko.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
+            buttonGaleriKtp.setOnClickListener {
+                launchGalleryKtp.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
 
             buttonMapToko.setOnClickListener {
                 val intent = Intent(this@TokoStoreActivity, MapsActivity::class.java)
@@ -108,6 +116,8 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                 this@TokoStoreActivity.binding.apply {
                     Glide.with(this@TokoStoreActivity).load(it.localPath?.let { File(it).path })
                         .placeholder(AppHelpers.circularProgressDrawable(this@TokoStoreActivity))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .centerCrop().into(imageKtp)
 
                     textPlaceholderImageKtp.isVisible = false
@@ -188,6 +198,34 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                     }
                 }
             }
+
+            ocrState.observe(this@TokoStoreActivity) {
+                when (it) {
+                    AppState.Loading -> {
+                        appDialog.showLoadingDialog()
+                    }
+
+                    AppState.Standby -> {
+                        appDialog.hideLoadingDialog()
+                    }
+
+                    is AppState.Error -> {
+                        appDialog.hideLoadingDialog()
+                        AppDialog.error(
+                            context = this@TokoStoreActivity, message = it.message
+                        )
+                    }
+
+                    is AppState.Success -> {
+                        appDialog.hideLoadingDialog()
+                        val dataOcr: DataOcr = it.data
+                        dataOcr.localPath =
+                            this@TokoStoreActivity.tokoStoreViewModel.capturedImageKtp.path
+
+                        this@TokoStoreActivity.tokoStoreViewModel.assignSelectedKtp(it.data)
+                    }
+                }
+            }
         }
     }
 
@@ -229,6 +267,25 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
                 this.tokoStoreViewModel.assignSelectedKtp(data)
             }
         }
+    }
+
+    private val launchGalleryKtp = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+
+        val destinationUri = Uri.fromFile(File(cacheDir, "cropped"))
+
+        val options = UCrop.Options()
+        options.setAspectRatioOptions(
+            0, AspectRatio(
+                "KTP",
+                19.toFloat(),
+                12.toFloat(),
+            )
+        )
+
+        UCrop.of(uri, destinationUri).withOptions(options).start(this)
     }
 
     private val launcherGallery = registerForActivityResult(
@@ -303,6 +360,21 @@ class TokoStoreActivity : Unfocus(), OnMapReadyCallback {
 
         return errors.isNotEmpty()
     }
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            val resultUri = UCrop.getOutput(data!!)
+
+            this@TokoStoreActivity.tokoStoreViewModel.capturedImageKtp = resultUri ?: Uri.parse("")
+            this@TokoStoreActivity.tokoStoreViewModel.doOcr(
+                context = this@TokoStoreActivity, capturedImage = resultUri ?: Uri.parse("")
+            )
+        }
+    }
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap

@@ -51,6 +51,10 @@ class TokoStoreViewModel(context: Context) : ViewModel() {
         MutableLiveData<AppState<BaseResponse>>()
     val storeTokoState: LiveData<AppState<BaseResponse>> = _storeTokoState
 
+    private val _ocrState: MutableLiveData<AppState<DataOcr>> = MutableLiveData(AppState.Standby)
+    val ocrState: LiveData<AppState<DataOcr>> = _ocrState
+    lateinit var capturedImageKtp: Uri
+
     fun assignSelectedKtp(newVal: DataOcr) {
         this._selectedKtp.value = newVal
     }
@@ -144,6 +148,63 @@ class TokoStoreViewModel(context: Context) : ViewModel() {
                 AppState.Success(
                     message = "Berhasil menyimpan toko.",
                     data = BaseResponse(),
+                )
+            )
+        }
+    }
+
+    fun doOcr(context: Context, capturedImage: Uri) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { err, message ->
+            AppHelpers.log(err.toString())
+
+            AppHelpers.log(message.toString())
+            AppHelpers.log(message.stackTrace.toString())
+
+            _ocrState.postValue(
+                AppState.Error(
+                    message = context.getString(R.string.ada_kesalahan_silahkan_coba_lagi_beberapa_saat_lagi)
+                )
+            )
+        }
+
+        CoroutineScope(coroutineExceptionHandler).launch {
+            _ocrState.postValue(AppState.Loading)
+
+            val imageFile = FileHelper.uriToFile(capturedImage, context).reduceFileImage()
+
+            AppHelpers.log(AppHelpers.getFileSizeInMB(imageFile))
+
+            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+            val photoMultipartBody = MultipartBody.Part.createFormData(
+                "ktp_photo", imageFile.name, requestImageFile
+            )
+
+
+            val response = async {
+                tokoRepository.ocr(
+                    token,
+                    photo = photoMultipartBody,
+                )
+            }.await()
+
+            if (!response.isSuccessful) {
+                val errorResponse: ErrorResponse = Gson().fromJson(
+                    response.errorBody()!!.charStream(), ErrorResponse::class.java
+                )
+                _ocrState.postValue(
+                    AppState.Error(
+                        message = errorResponse.message ?: "",
+                    )
+                )
+                return@launch
+            }
+
+            val dataOcr: DataOcr = response.body()?.data ?: DataOcr()
+
+            _ocrState.postValue(
+                AppState.Success(
+                    message = "Berhasil",
+                    data = dataOcr,
                 )
             )
         }
