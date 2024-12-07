@@ -5,6 +5,7 @@ import com.untillness.borwita.data.remote.responses.BaseResponse
 import com.untillness.borwita.data.remote.responses.ErrorResponse
 import com.untillness.borwita.data.remote.responses.GeoreverseResponse
 import com.untillness.borwita.data.remote.responses.LoginResponse
+import com.untillness.borwita.data.remote.responses.NewsResponse
 import com.untillness.borwita.data.remote.responses.OcrResponse
 import com.untillness.borwita.data.remote.responses.ProfileResponse
 import com.untillness.borwita.data.remote.responses.RegisterResponse
@@ -105,4 +106,7 @@ interface ApiInterface {
     suspend fun deleteToko(
         @Path("id") id: String,
     ): Response<BaseResponse>
+
+    @GET("/api/v1/news/")
+    suspend fun news(): Response<NewsResponse>
 }
