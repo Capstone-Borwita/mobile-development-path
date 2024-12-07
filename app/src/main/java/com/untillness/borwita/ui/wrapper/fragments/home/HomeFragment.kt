@@ -14,7 +14,7 @@ import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.FragmentHomeBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
-import com.untillness.borwita.ui.toko_detail.TokoDetailActivity
+import com.untillness.borwita.ui.news_detail.NewsDetailActivity
 import com.untillness.borwita.ui.wrapper.WrapperViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileFragment.Companion.doLogout
 import com.untillness.borwita.widgets.AppDialog
@@ -142,10 +142,11 @@ class HomeFragment : Fragment() {
                                 context = this@HomeFragment.requireContext(),
                                 recyclerView = rvBerita,
                                 data = it.data
-                            ) {
+                            ) {dataNews ->
                                 val intent =
-                                    Intent(binding.root.context, TokoDetailActivity::class.java)
-                                intent.putExtra(TokoDetailActivity.EXTRA_ID, it.id.toString())
+                                    Intent(binding.root.context, NewsDetailActivity::class.java)
+
+                                intent.putExtra(NewsDetailActivity.EXTRA_DETAIL_NEWS, dataNews)
 
                                 startActivity(intent)
                             }
