@@ -1,6 +1,7 @@
 package com.untillness.borwita.ui.wrapper.fragments.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.untillness.borwita.data.states.AppState
 import com.untillness.borwita.databinding.FragmentHomeBinding
 import com.untillness.borwita.helpers.AppHelpers
 import com.untillness.borwita.helpers.ViewModelFactory
+import com.untillness.borwita.ui.news_detail.NewsDetailActivity
 import com.untillness.borwita.ui.wrapper.WrapperViewModel
 import com.untillness.borwita.ui.wrapper.fragments.profile.ProfileFragment.Companion.doLogout
 import com.untillness.borwita.widgets.AppDialog
@@ -30,7 +32,8 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        this.wrapperViewModel = ViewModelFactory.obtainViewModel<WrapperViewModel>(this.requireActivity())
+        this.wrapperViewModel =
+            ViewModelFactory.obtainViewModel<WrapperViewModel>(this.requireActivity())
         this.homeViewModel = ViewModelFactory.obtainViewModel<HomeViewModel>(this.requireActivity())
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -52,6 +55,7 @@ class HomeFragment : Fragment() {
         this.binding.apply {
             refreshIndicator.setOnRefreshListener {
                 this@HomeFragment.wrapperViewModel.initState(this@HomeFragment.requireContext())
+                this@HomeFragment.homeViewModel.refreshIndicator(this@HomeFragment.requireContext())
                 refreshIndicator.isRefreshing = false
             }
             widgetHeaderHome.buttonLogout.setOnClickListener {
@@ -102,6 +106,50 @@ class HomeFragment : Fragment() {
                             Glide.with(this@HomeFragment).load(it.data.data?.avatarPath ?: "-")
                                 .placeholder(AppHelpers.circularProgressDrawable(this@HomeFragment.requireContext()))
                                 .fitCenter().into(widgetHeaderHome.avatar)
+                        }
+                    }
+                }
+            }
+        }
+
+        this@HomeFragment.homeViewModel.apply {
+            dataNews.observe(viewLifecycleOwner) {
+                when (it) {
+                    AppState.Standby, AppState.Loading -> {
+                        this@HomeFragment.binding.apply {
+                            shimmer.isVisible = true
+                            emptyData.emptyData.isVisible = false
+                            rvBerita.isVisible = false
+                        }
+                    }
+
+                    is AppState.Error -> {
+                        this@HomeFragment.binding.apply {
+                            shimmer.isVisible = false
+                            emptyData.emptyData.isVisible = true
+                            rvBerita.isVisible = false
+                            emptyData.emptyDataText.text = it.message
+                        }
+                    }
+
+                    is AppState.Success -> {
+                        this@HomeFragment.binding.apply {
+                            shimmer.isVisible = false
+                            emptyData.emptyData.isVisible = false
+                            rvBerita.isVisible = true
+
+                            NewsAdapter.setUpRecyclerView(
+                                context = this@HomeFragment.requireContext(),
+                                recyclerView = rvBerita,
+                                data = it.data
+                            ) {dataNews ->
+                                val intent =
+                                    Intent(binding.root.context, NewsDetailActivity::class.java)
+
+                                intent.putExtra(NewsDetailActivity.EXTRA_DETAIL_NEWS, dataNews)
+
+                                startActivity(intent)
+                            }
                         }
                     }
                 }
