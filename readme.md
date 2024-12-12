@@ -30,3 +30,14 @@ cd mobile-development-path
 ```
 
 Finally, open the Borwita Capstone directory in Android Studio.
+
+## Screenshots
+![Screenshot](./assets/auth.png)
+
+![Screenshot](./assets/wrapper.png)
+
+![Screenshot](./assets/berita.png)
+
+![Screenshot](./assets/profil.png)
+
+![Screenshot](./assets/toko.png)
