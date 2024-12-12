@@ -13,8 +13,8 @@ android {
         applicationId = "com.untillness.borwita"
         minSdk = 30
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.0.4"
+        versionCode = 5
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL_V1", "\"https://borwita-ktp-api.ignorelist.com/\"")
